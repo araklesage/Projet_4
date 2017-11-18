@@ -87,6 +87,16 @@ class BookingController extends Controller
     }
     */
 
+    public function getPrixTotal()
+    {
+        $price = 0;
+        foreach($this->getTickets()as $ticket) {
+            $price += $ticket->getTickets();
+        }
+
+        return $price;
+    }
+
     public function mailAction()
     {
         $message = (new \Swift_Message('Hello Email'))

@@ -42,12 +42,7 @@ class Ticket
      */
     private $fullOrNot;
 
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="reduct", type="boolean")
-     */
-    private $reduct;
+
 
 
     /**

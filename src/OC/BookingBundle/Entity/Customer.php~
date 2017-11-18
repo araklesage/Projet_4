@@ -168,28 +168,5 @@ class Customer
     {
         return $this->birthDate;
     }
-
-    /**
-     * Set rabatt
-     *
-     * @param boolean $rabatt
-     *
-     * @return Customer
-     */
-    public function setRabatt($rabatt)
-    {
-        $this->rabatt = $rabatt;
-
-        return $this;
-    }
-
-    /**
-     * Get rabatt
-     *
-     * @return boolean
-     */
-    public function getRabatt()
-    {
-        return $this->rabatt;
-    }
 }
+
