@@ -1,0 +1,69 @@
+{# On utilise ici le layout général, qui se situe dans ce même CoreBundle maintenant #}
+{% extends "OCCoreBundle::layout.html.twig" %}
+
+{% block title %}
+    Page d'accueil - {{ parent() }}
+{% endblock %}
+
+{% block body %}
+
+    <h2>Accueil</h2>
+
+{# On affiche tous les messages flash dont le nom est « info » #}
+  {% for message in app.session.flashbag.get('info') %}
+      <div class="alert alert-info">Message flash : {{ message }}</div>
+  {% endfor %}
+
+  {# Pour afficher les dernières annonces, on réutilise le contrôleur menu du PlatformBundle #}
+
+
+
+
+        {# Ici, on devrait utiliser un contrôleur pour afficher les différents billets, leurs prix et leur spécificité. #}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-2" >
+                <h2>Ticket Plein Tarif</h2>
+                <br>
+                <h3>11 €</h3>
+                <div class="row">
+                <input type="number" class="col-xs-4">
+                <button type="button" class="btn btn-primary btn-sm">Ajoutez</button>
+                </div>
+            </div>
+
+            <div class="col-xs-2">
+                <h2>Ticket Enfant</h2>
+                <br>
+                <h3>8 €</h3>
+                <div class="row">
+                    <input type="number" class="col-xs-4">
+                    <button type="button" class="btn btn-primary btn-sm">Ajoutez</button>
+                </div>
+            </div>
+
+            <div class="col-xs-2">
+                <h2>Ticket Sénior</h2>
+                <br>
+                <h3>12€</h3>
+                <div class="row">
+                    <input type="number" class="col-xs-4">
+                    <button type="button" class="btn btn-primary btn-sm">Ajoutez</button>
+                </div>
+
+            </div>
+
+            <div class="col-xs-2" >
+                <h2>Ticket Tarif Réduit</h2>
+                <br>
+                <h3>10 €</h3>
+                <div class="row">
+                    <input type="number" class="col-xs-4">
+                    <button type="button" class="btn btn-primary btn-sm">Ajoutez</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

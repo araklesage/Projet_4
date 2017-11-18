@@ -1,0 +1,18 @@
+oc_booking_homepage:
+    path:     /{page}
+    defaults:
+         _controller: OCBookingBundle:Booking:index
+         page:
+    requirements:
+        page: \d*
+
+oc_booking_view:
+    path:      /booking/ticket/{id}
+    defaults:
+        _controller: OCBookingBundle:Ticket:view
+    requirements:
+        id: \d+
+oc_mail:
+    path:     /test
+    defaults:
+        _controller: OCBookingBundle:Booking:mail

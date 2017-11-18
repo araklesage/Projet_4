@@ -1,0 +1,14 @@
+{# src/OC/BookingBundle/Resources/Ticket/view.html.twig #}
+
+
+    {% for ticket in listTickets %}
+    <li>
+        <h2>{{ ticket.title }}</h2>
+        <i>Prix: {{ ticket.price }}, pour le {{ ticket.date|date('d/m/Y') }}</i>
+
+        <div class="well">
+            {{ ticket.content }}
+        </div>
+    </li>
+    {% endfor %}
+
