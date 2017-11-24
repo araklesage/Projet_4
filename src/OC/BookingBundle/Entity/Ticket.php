@@ -22,13 +22,6 @@ class Ticket
     private $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="Title", type="string", length=255)
-     */
-    private $title;
-
-    /**
      * @var int
      *
      * @ORM\Column(name="price", type="integer")
@@ -36,13 +29,18 @@ class Ticket
     private $price;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="title", type="string", length=156)
+     */
+    private $title;
+
+    /**
      * @var bool
      *
-     * @ORM\Column(name="fullOrNot", type="boolean")
+     * @ORM\Column(name="reduct", type="boolean")
      */
-    private $fullOrNot;
-
-
+    private $reduct;
 
 
     /**
@@ -53,30 +51,6 @@ class Ticket
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set title
-     *
-     * @param string $title
-     *
-     * @return Ticket
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    /**
-     * Get title
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
     }
 
     /**
@@ -104,27 +78,27 @@ class Ticket
     }
 
     /**
-     * Set fullOrNot
+     * Set title
      *
-     * @param boolean $fullOrNot
+     * @param string $title
      *
      * @return Ticket
      */
-    public function setFullOrNot($fullOrNot)
+    public function setTitle($title)
     {
-        $this->fullOrNot = $fullOrNot;
+        $this->title = $title;
 
         return $this;
     }
 
     /**
-     * Get fullOrNot
+     * Get title
      *
-     * @return bool
+     * @return string
      */
-    public function getFullOrNot()
+    public function getTitle()
     {
-        return $this->fullOrNot;
+        return $this->title;
     }
 
     /**

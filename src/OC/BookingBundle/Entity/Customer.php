@@ -12,12 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Customer
 {
-    /*
-     * @ORM\ManyToOne(targetEntity="OC\BookingBundle\Entity\Booking")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $booking;
-
     /**
      * @var int
      *
@@ -35,11 +29,11 @@ class Customer
     private $firstName;
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="lastName", type="string", length=255)
+     * @ORM\Column(name="birthDate", type="datetime")
      */
-    private $lastName;
+    private $birthDate;
 
     /**
      * @var string
@@ -49,18 +43,32 @@ class Customer
     private $country;
 
     /**
-     * @var \DateTime
+     * @var string
      *
-     * @ORM\Column(name="birthDate", type="datetime")
+     * @ORM\Column(name="lastName", type="string", length=255)
      */
-    private $birthDate;
+    private $lastName;
 
     /**
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(name="rabatt", type="boolean")
+     * @ORM\Column(name="cardNumber", type="integer")
      */
-    private $rabatt;
+    private $cardNumber;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="cvv", type="integer")
+     */
+    private $cvv;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="expirationDate", type="datetime")
+     */
+    private $expirationDate;
 
 
     /**
@@ -98,27 +106,27 @@ class Customer
     }
 
     /**
-     * Set lastName
+     * Set birthDate
      *
-     * @param string $lastName
+     * @param \DateTime $birthDate
      *
      * @return Customer
      */
-    public function setLastName($lastName)
+    public function setBirthDate($birthDate)
     {
-        $this->lastName = $lastName;
+        $this->birthDate = $birthDate;
 
         return $this;
     }
 
     /**
-     * Get lastName
+     * Get birthDate
      *
-     * @return string
+     * @return \DateTime
      */
-    public function getLastName()
+    public function getBirthDate()
     {
-        return $this->lastName;
+        return $this->birthDate;
     }
 
     /**
@@ -146,50 +154,99 @@ class Customer
     }
 
     /**
-     * Set birthDate
+     * Set lastName
      *
-     * @param \DateTime $birthDate
+     * @param string $lastName
      *
      * @return Customer
      */
-    public function setBirthDate($birthDate)
+    public function setLastName($lastName)
     {
-        $this->birthDate = $birthDate;
+        $this->lastName = $lastName;
 
         return $this;
     }
 
     /**
-     * Get birthDate
+     * Get lastName
+     *
+     * @return string
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * Set cardNumber
+     *
+     * @param integer $cardNumber
+     *
+     * @return Customer
+     */
+    public function setCardNumber($cardNumber)
+    {
+        $this->cardNumber = $cardNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get cardNumber
+     *
+     * @return int
+     */
+    public function getCardNumber()
+    {
+        return $this->cardNumber;
+    }
+
+    /**
+     * Set cvv
+     *
+     * @param integer $cvv
+     *
+     * @return Customer
+     */
+    public function setCvv($cvv)
+    {
+        $this->cvv = $cvv;
+
+        return $this;
+    }
+
+    /**
+     * Get cvv
+     *
+     * @return int
+     */
+    public function getCvv()
+    {
+        return $this->cvv;
+    }
+
+    /**
+     * Set expirationDate
+     *
+     * @param \DateTime $expirationDate
+     *
+     * @return Customer
+     */
+    public function setExpirationDate($expirationDate)
+    {
+        $this->expirationDate = $expirationDate;
+
+        return $this;
+    }
+
+    /**
+     * Get expirationDate
      *
      * @return \DateTime
      */
-    public function getBirthDate()
+    public function getExpirationDate()
     {
-        return $this->birthDate;
-    }
-
-    /**
-     * Set rabatt
-     *
-     * @param boolean $rabatt
-     *
-     * @return Customer
-     */
-    public function setRabatt($rabatt)
-    {
-        $this->rabatt = $rabatt;
-
-        return $this;
-    }
-
-    /**
-     * Get rabatt
-     *
-     * @return boolean
-     */
-    public function getRabatt()
-    {
-        return $this->rabatt;
+        return $this->expirationDate;
     }
 }
+

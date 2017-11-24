@@ -41,8 +41,12 @@ class Booking
      * @ORM\Column(name="totalCost", type="integer")
      */
 
-    private $rabatt;
 
+    public function __construct()
+    {
+        // Par défaut, la date de la commande est la date d'aujourd'hui
+        $this->date = new \Datetime();
+    }
 
     /**
      * Get id
@@ -109,20 +113,5 @@ class Booking
      *
      * @return Booking
      */
-    public function setRabatt($rabatt)
-    {
-        $this->rabatt = $rabatt;
 
-        return $this;
-    }
-
-    /**
-     * Get rabatt
-     *
-     * @return bool
-     */
-    public function getRabatt()
-    {
-        return $this->rabatt;
-    }
 }
