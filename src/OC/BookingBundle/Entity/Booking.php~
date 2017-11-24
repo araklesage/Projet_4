@@ -13,6 +13,12 @@ use Doctrine\ORM\Mapping as ORM;
 class Booking
 {
     /**
+     * @ORM\OneToOne(targetEntity="OC\BookingBundle\Entity\Customer", cascade={"persist"})
+     */
+    private $customer;
+
+
+    /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
@@ -36,13 +42,18 @@ class Booking
     private $numberBooking;
 
     /**
-     * @var int
+     * @var array
      *
-     * @ORM\Column(name="totalCost", type="integer")
+     * @ORM\Column(name="ticketsList", type="array")
      */
+    private $ticketsList;
 
-    private $rabatt;
 
+    public function __construct()
+    {
+        // Par défaut, la date de la commande est la date d'aujourd'hui
+        $this->date = new \Datetime();
+    }
 
     /**
      * Get id
@@ -109,21 +120,46 @@ class Booking
      *
      * @return Booking
      */
-    public function setRabatt($rabatt)
+
+    public function setTicketsList($ticketsList)
     {
-        $this->rabatt = $rabatt;
+        $this->ticketsList = $ticketsList;
 
         return $this;
     }
 
     /**
-     * Get rabatt
+     * Get ticketsList
      *
-     * @return bool
+     * @return array
      */
-    public function getRabatt()
+    public function getTicketsList()
     {
-        return $this->rabatt;
+        return $this->ticketsList;
+    }
+
+
+    /**
+     * Set customer
+     *
+     * @param \OC\BookingBundle\Entity\Customer $customer
+     *
+     * @return Booking
+     */
+    public function setCustomer(\OC\BookingBundle\Entity\Customer $customer = null)
+    {
+        $this->customer = $customer;
+
+        return $this;
+    }
+
+    /**
+     * Get customer
+     *
+     * @return \OC\BookingBundle\Entity\Customer
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
     }
 }
-

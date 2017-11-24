@@ -13,6 +13,17 @@ use Doctrine\ORM\Mapping as ORM;
 class Booking
 {
     /**
+     * @ORM\OneToOne(targetEntity="OC\BookingBundle\Entity\Customer", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $customer;
+
+    /**
+     * @ORM\
+     */
+
+
+    /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
@@ -36,10 +47,11 @@ class Booking
     private $numberBooking;
 
     /**
-     * @var int
+     * @var array
      *
-     * @ORM\Column(name="totalCost", type="integer")
+     * @ORM\Column(name="ticketsList", type="array")
      */
+    private $ticketsList;
 
 
     public function __construct()
@@ -114,4 +126,45 @@ class Booking
      * @return Booking
      */
 
+    public function setTicketsList($ticketsList)
+    {
+        $this->ticketsList = $ticketsList;
+
+        return $this;
+    }
+
+    /**
+     * Get ticketsList
+     *
+     * @return array
+     */
+    public function getTicketsList()
+    {
+        return $this->ticketsList;
+    }
+
+
+    /**
+     * Set customer
+     *
+     * @param \OC\BookingBundle\Entity\Customer $customer
+     *
+     * @return Booking
+     */
+    public function setCustomer(\OC\BookingBundle\Entity\Customer $customer = null)
+    {
+        $this->customer = $customer;
+
+        return $this;
+    }
+
+    /**
+     * Get customer
+     *
+     * @return \OC\BookingBundle\Entity\Customer
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
+    }
 }
