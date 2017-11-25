@@ -250,28 +250,4 @@ class Ticket
     {
         return $this->lastName;
     }
-
-    /**
-     * Set booking
-     *
-     * @param \OC\BookingBundle\Entity\Booking $booking
-     *
-     * @return Ticket
-     */
-    public function setBooking(\OC\BookingBundle\Entity\Booking $booking)
-    {
-        $this->booking = $booking;
-
-        return $this;
-    }
-
-    /**
-     * Get booking
-     *
-     * @return \OC\BookingBundle\Entity\Booking
-     */
-    public function getBooking()
-    {
-        return $this->booking;
-    }
 }

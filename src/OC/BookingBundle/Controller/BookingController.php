@@ -4,7 +4,9 @@
 namespace OC\BookingBundle\Controller;
 
 use OC\BookingBundle\Entity\Customer;
+use Oc\BookingBundle\Entity\Ticket;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -60,6 +62,28 @@ class BookingController extends Controller
             'listTickets' => $listTickets,
         ));
     }
+    public function addTicket()
+        {
+
+        $ticket = new Ticket();
+
+        $formBuilder = $this->get('form.factory')->createBuilder(FormType::class, $ticket);
+
+        $formBuilder
+            ->add('date',       DateType::class)
+            ->add('title',     ChoiceType::class)
+            ->add('firstName', TextType::class)
+            ->add('lastName',  TextType::class)
+            ->add('dateBirth', DateType::class)
+            ->add('rabbat',    CheckboxType::class)
+            ;
+
+        $form = $formBuilder->getForm();
+
+        return $this->render('OCBookingBundle:Ticket:add.html.twig', array(
+            'form' =>$form->createView(),
+        ));
+        }
 
     public function menuAction()
     {
@@ -86,6 +110,16 @@ class BookingController extends Controller
          ));
     }
     */
+
+    public function getPrixTotal()
+    {
+        $price = 0;
+        foreach($this->getTicketsList()as $ticket) {
+            $price += $ticket->getTicketsLists();
+        }
+
+        return $price;
+    }
 
     public function mailAction()
     {

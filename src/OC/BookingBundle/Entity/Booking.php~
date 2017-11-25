@@ -14,13 +14,8 @@ class Booking
 {
     /**
      * @ORM\OneToOne(targetEntity="OC\BookingBundle\Entity\Customer", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
      */
     private $customer;
-
-    /**
-     * @ORM\
-     */
 
 
     /**

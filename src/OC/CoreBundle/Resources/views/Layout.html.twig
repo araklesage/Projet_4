@@ -12,30 +12,28 @@
 
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="../../../BookingBundle/Resources/public/css/Base.css">
+        <link rel="stylesheet" href="{{ asset('bundles/occore/css/style.css') }}">
 
     {% endblock %}
 </head>
 
 <body>
-<div class="container">
-    <div id="header" class="jumbotron">
+<div class="container-fluid">
+    <!-- Banner -->
+    <div id="header" class="jumbotron banner">
+        <div class="container">
         <h1>Plateforme de Réservation du Louvre</h1>
         <p>
             Ce projet est propulsé par Symfony, et construit grâce au MOOC OpenClassrooms et SensioLabs.
         </p>
+        </div>
 
     </div>
 
     <div class="row">
-        <div id="menu" class="col-md-3">
-            <h3>Votre sélection</h3>
-            <ul class="nav nav-pills nav-stacked">
-                <li></li>
-                <li></li>
-            </ul>
-{#Création du panier d'achat#}
-            <h4>à travailler</h4>
-            {{ (include("OCBookingBundle:Ticket:menu.html.twig")) }}
+        <div id="menu" class="navbar-nav">
+            <a class="navbar-brand">Votre sélection</a>
+
 
         </div>
         <div id="content" class="col-md-9">
