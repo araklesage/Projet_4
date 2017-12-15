@@ -3,11 +3,15 @@
 
 namespace OC\BookingBundle\Controller;
 
+use OC\BookingBundle\Entity\Booking;
 use OC\BookingBundle\Entity\Customer;
-use Oc\BookingBundle\Entity\Ticket;
+use OC\BookingBundle\Entity\Ticket;
+use OC\BookingBundle\Utils\PriceService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -20,49 +24,62 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 
 
+
 class BookingController extends Controller
 {
-    public function indexAction($page)
+    public function indexAction(Request $request)
     {
-        if ($page < 1) {
-            throw new NotFoundHttpException('Page "'.$page.'"inexistante.');
+        $ticket = new Ticket();
+
+        $form = $this->get('form.factory')->createBuilder(FormType::class, $ticket)
+            ->add('date',       DateType::class)
+            ->add('firstName',  TextType::class)
+            ->add('lastName',   TextType::class)
+            ->add('birthDate',  BirthdayType::class)
+            ->add('country',    CountryType::class)
+            ->add('reduct',     CheckboxType::class, array('required' => false))
+            ->add('save',       SubmitType::class)
+
+            ->getForm()
+        ;
+
+        if ($request->isMethod('POST')){
+            $form->handleRequest($request);
+
+            if ($form->isValid()){
+                $em = $this->getDoctrine()->getManager();
+                $session= $request->getSession();
+                $tickets= ($session->get('tickets'))?$session->get('tickets'):array();
+                $tickets[]= $ticket;
+                $session->set('tickets',$tickets);
+
+                $request->getSession()->getFlashBag()->add('notice', 'Ticket ajouté');
+
+                return $this->render('OCBookingBundle:Ticket:index.html.twig', array(
+                    "form"=>$form->createView(),
+                    "tickets"=>$tickets,
+                ));
+            }
         }
 
-        //liste ticket en dur
-
-        $listTickets = array(
-            array(
-                array(
-                    'title'   => 'Ticket jour plein tarif',
-                    'id'      => 1,
-                    'price'  => '16 €',
-                    'content' => "permet l'accès à l'ensemble du musée toute la journée. ",
-                    'date'    => new \Datetime()),
-                array(
-                    'title'   => 'Ticket jour enfant',
-                    'id'      => 2,
-                    'price'  => '8 €',
-                    'content' => "permet l'accès à l'ensemble du musée toute la journée, pour les enfants de moins de 12 ans. ",
-                    'date'    => new \Datetime()),
-                array(
-                    'title'   => 'Ticket jour senior',
-                    'id'      => 3,
-                    'price'  => '12 €',
-                    'content' => "permet l'accès à l'ensemble du musée toute la journée, pour les personnes de plus de 60 ans. ",
-                    'date'    => new \Datetime()),
-                array(
-                    'title'   => 'Ticket jour tarif réduit',
-                    'id'      => 4,
-                    'price'  => '10 €',
-                    'content' => "permet l'accès à l'ensemble du musée toute la journée, pour les étudiants.",
-                    'date'    => new \Datetime()),
-            ));
-
             return $this->render('OCBookingBundle:Ticket:index.html.twig', array(
-            'listTickets' => $listTickets,
+                "form"=>$form->createView(),
         ));
     }
-    public function addTicket()
+    public function panierAction(Request $request)
+    {
+        $priceService = $this -> container ->get('oc_booking.prices');
+        $session= $request->getSession();
+        $tickets = $session->get('tickets');
+
+
+
+
+        return $this->render('OCBookingBundle:Ticket:basket.html.twig', array(
+            "tickets"=>$tickets,
+        ));
+    }
+    public function addTicketAction()
         {
 
         $ticket = new Ticket();
@@ -71,11 +88,11 @@ class BookingController extends Controller
 
         $formBuilder
             ->add('date',       DateType::class)
-            ->add('title',     ChoiceType::class)
-            ->add('firstName', TextType::class)
-            ->add('lastName',  TextType::class)
-            ->add('dateBirth', DateType::class)
-            ->add('rabbat',    CheckboxType::class)
+            ->add('firstName',  TextType::class)
+            ->add('lastName',   TextType::class)
+            ->add('birthDate',  DateType::class)
+            ->add('reduct',     CheckboxType::class)
+            ->add('save',       SubmitType::class)
             ;
 
         $form = $formBuilder->getForm();
@@ -85,31 +102,25 @@ class BookingController extends Controller
         ));
         }
 
+    public function customerForm()
+    {
+        $customer = new Customer();
+
+        $formBuilder = $this->get('form.factory')->createBuilder(FormType::class, $customer);
+
+        $formBuilder
+            ->add('cardName',   TextType::class)
+            ->add('cardNumber', IntegerType::class)
+            ->add('cvv',        IntegerType::class);
+    }
+
     public function menuAction()
     {
 
 
-        return $this->render('OCBookingBundle:Ticket:menu.html.twig');
+        return $this->render('basket.html.twig');
     }
-    /*public function buildForm()
-    {
-        $customer = new Customer();
 
-        $formbuilder = $this ->get('form.factory')->createBuilder(FormType::class, $advert);
-
-        $formbuilder
-            ->add('firstName',     TextType::class)
-            ->add('lastName',      TextType::class)
-            ->add('country',        CountryType::class)
-            ->add('birthDate',      BirthdayType::class)
-
-        $form = $formBuilder->getForm();
-
-         return $this->render('OCBookingBundle:Ticket:form.html.twig', array(
-             'form' => $form->(),
-         ));
-    }
-    */
 
     public function getPrixTotal()
     {

@@ -1,0 +1,29 @@
+{# src/OCBookingBundle/Ressources/views/Booking/basket.html.twig
+#}
+<!-- Sidebar Header -->
+<div class="col-lg-4">
+        <nav  id="sidebar">
+            <!-- Sidebar Header -->
+            <div class="sidebar-header">
+                <h3>Votre Réservation</h3>
+            </div>
+
+    <!-- Sidebar Tickets -->
+
+            <ul >
+
+                {% for ticket in tickets %}
+                    <li>
+                        {{ ticket.date|date('d F Y') }}
+
+                        {{ ticket.lastName}}
+
+                        {{ ticket.price }}
+                    </li>
+                {% endfor %}
+            </ul>
+            <button type="submit" class="btn btn-primary">Validez le panier</button>
+        </nav>
+</div>
+
+

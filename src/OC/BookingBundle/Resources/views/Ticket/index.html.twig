@@ -7,10 +7,39 @@
 {% endblock %}
 
 {% block body %}
+        <div class="col-ms-3" >
+            <h2>Ticket De Vinci</h2>
+            <br>
+            <p>
+                Ticket tarif plein, permet l'accès à l'ensemble du musée.
+            </p>
+            <h3>11 €</h3>
+        </div>
 
-<h2>Liste des tickets</h2>
+        <div class="col-lg-3">
+            <h2>Ticket Enfant</h2>
+            <br>
+            <h3>8 €</h3>
+        </div>
 
-<div class="container">
+        <div class="col-lg-3">
+            <h2>Ticket Sénior</h2>
+            <br>
+            <h3>12€</h3>
+        </div>
 
+        <div class="col-lg-3" >
+            <h2>Ticket Tarif Réduit</h2>
+            <br>
+            <h3>10 €</h3>
+        </div>
 </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <h3>Formulaire de réservation</h3>
+            <div class="well">
+                {{ form(form) }}
+            </div>
+        </div>
+    </div>
 {% endblock %}
