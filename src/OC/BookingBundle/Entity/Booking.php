@@ -3,6 +3,7 @@
 namespace OC\BookingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints AS Assert;
 
 /**
  * Booking
@@ -17,11 +18,6 @@ class Booking
      * @ORM\JoinColumn(nullable=false)
      */
     private $customer;
-
-    /**
-     * @ORM\
-     */
-
 
     /**
      * @var int
@@ -52,6 +48,14 @@ class Booking
      * @ORM\Column(name="ticketsList", type="array")
      */
     private $ticketsList;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string")
+     * @Assert\Email
+     */
+    private $email;
 
 
     public function __construct()
@@ -166,5 +170,29 @@ class Booking
     public function getCustomer()
     {
         return $this->customer;
+    }
+
+    /**
+     * Set email
+     *
+     * @param string $email
+     *
+     * @return Booking
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
     }
 }

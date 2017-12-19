@@ -4,6 +4,7 @@ namespace OC\BookingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+
 /**
  * Ticket
  *
@@ -37,11 +38,12 @@ class Ticket
     private $price;
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="title", type="string", length=156)
+     * @ORM\Column(name="date",type="dateTime")
      */
-    private $title;
+    private $date;
+
 
     /**
      * @var bool
@@ -107,29 +109,6 @@ class Ticket
         return $this->price;
     }
 
-    /**
-     * Set title
-     *
-     * @param string $title
-     *
-     * @return Ticket
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    /**
-     * Get title
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
 
     /**
      * Set reduct
@@ -249,5 +228,53 @@ class Ticket
     public function getLastName()
     {
         return $this->lastName;
+    }
+
+    /**
+     * Set booking
+     *
+     * @param \OC\BookingBundle\Entity\Booking $booking
+     *
+     * @return Ticket
+     */
+    public function setBooking(\OC\BookingBundle\Entity\Booking $booking)
+    {
+        $this->booking = $booking;
+
+        return $this;
+    }
+
+    /**
+     * Get booking
+     *
+     * @return \OC\BookingBundle\Entity\Booking
+     */
+    public function getBooking()
+    {
+        return $this->booking;
+    }
+
+    /**
+     * Set date
+     *
+     * @param \dateTime $date
+     *
+     * @return Ticket
+     */
+    public function setDate(\dateTime $date)
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \dateTime
+     */
+    public function getDate()
+    {
+        return $this->date;
     }
 }
