@@ -19,11 +19,13 @@
                         {{ ticket.lastName}}
 
                         {{ ticket.price }}
+                        <button type="button" class="btn btn-danger">X</button>
 
                     </li>
                 {% endfor %}
             </ul>
-            <button type="submit" class="btn btn-primary">Validez le panier</button>
+            <a href="{{ path('oc_booking_card') }}" class= "btn btn-primary">Valider le panier</a>
+
         </nav>
 </div>
 

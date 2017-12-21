@@ -4,8 +4,10 @@
 namespace OC\BookingBundle\Controller;
 
 use OC\BookingBundle\Entity\Booking;
+use OC\BookingBundle\Entity\Contact;
 use OC\BookingBundle\Entity\Customer;
 use OC\BookingBundle\Entity\Ticket;
+use OC\BookingBundle\Form\ContactType;
 use OC\BookingBundle\Form\TicketDeleteType;
 use OC\BookingBundle\Utils\PriceService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -23,6 +25,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
+
 
 
 
@@ -54,7 +57,7 @@ class BookingController extends Controller
                 $tickets[]= $ticket;
                 $session->set('tickets',$tickets);
 
-                $request->getSession()->getFlashBag()->add('notice', 'Ticket ajouté');
+                $request->getSession()->getFlashBag()->add('success', 'Ticket ajouté');
 
                 return $this->render('OCBookingBundle:Ticket:index.html.twig', array(
                     "form"=>$form->createView(),
@@ -65,6 +68,20 @@ class BookingController extends Controller
 
             return $this->render('OCBookingBundle:Ticket:index.html.twig', array(
                 "form"=>$form->createView(),
+        ));
+    }
+    public function deleteAction(Request $request){
+        $session = $this->getRequest()->getSesion();
+        $tickets = $session->get('tickets');
+
+        if (array_key_exists($id, $tickets)){
+            unset($tickets[$id]);
+            $session->set('tickets', $tickets);
+            $this->get('session')->getFlashBag()->add('success','Ticket supprimé avec succès !');
+        }
+        return $this->render('OCBookingBundle:Ticket:index.html.twig',array(
+            "form"=>$form->createView(),
+            "tickets"=>$tickets,
         ));
     }
     public function panierAction(Request $request)
@@ -118,7 +135,14 @@ class BookingController extends Controller
         $formBuilder
             ->add('cardName',   TextType::class)
             ->add('cardNumber', IntegerType::class)
-            ->add('cvv',        IntegerType::class);
+            ->add('cvv',        IntegerType::class)
+            ->add('save',       SumbitType::class);
+
+        $card = $formBuilder->getForm();
+
+        return $this->render('OCBookingBundle:Ticket:card.html.twig', array(
+            'card' =>$card->createView(),
+        ));
     }
 
     public function menuAction()
@@ -161,9 +185,46 @@ class BookingController extends Controller
         return $this->render('OCBookingBundle:Ticket:index.html.twig');
     }
 
-    public function deleteAction(){
+    public function cardAction()
+    {
+        $customer = new Customer();
+
+        $formBuilder = $this->get('form.factory')->createBuilder(FormType::class, $customer);
+
+        $formBuilder
+            ->add('cardName',   TextType::class)
+            ->add('cardNumber', IntegerType::class)
+            ->add('cvv',        IntegerType::class)
+            ->add('save',       SubmitType::class);
+
+        $card = $formBuilder->getForm();
+
+        return $this->render('OCBookingBundle:Ticket:card.html.twig', array(
+            'form' =>$card->createView(),
+        ));
 
     }
+
+    public function contactAction()
+    {
+        $contact = new Contact;
+        $form = $this->get('form.factory')->create(ContactType::class, $contact);
+
+        if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($contact);
+            $em->flush();
+
+            $request->getSession()->getFlashBag()->add('notice', 'Annonce bien enregistrée.');
+
+            return $this->redirectToRoute('oc_platform_home');
+        }
+        return $this->render('OCBookingBundle:Contact:contact', array(
+            'form' => $form->createView(),
+        ));
+    }
+
+
 
 
 

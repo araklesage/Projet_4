@@ -27,11 +27,19 @@
                     <h2 class="site-description">N'attendez plus des heures devant le Musée, Entrez-y Directement!</h2>
                 </div>
             </header>
+            <div >
+                {% for flashMessage in app.session.flashbag.get('success') %}
+                    <div class="alert alert-success">
+                        {{ flashMessage }}
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
     <div class="row">
             <!-- SideBar basket -->
         {{ render(controller("OCBookingBundle:Booking:panier")) }}
+
 
             {% block body %}
             {% endblock %}
@@ -39,7 +47,18 @@
 
     <hr>
     <footer>
-        <p>Arak's Dreams © {{ 'now'|date('Y') }}</p>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-10">
+                    <p>Arak's Dreams © {{ 'now'|date('Y') }}</p>
+                </div>
+                <div class="'col-lg-2">
+                    <a href="{{ path('oc_booking_contact') }}" class="btn btn-default btn-lg" title="Contact">
+                        <span class="glyphicon glyphicon-envelope"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
     </footer>
 
 
@@ -51,6 +70,7 @@
     {# Ajoutez ces lignes JavaScript si vous comptez vous servir des fonctionnalités du bootstrap Twitter #}
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
 
 {% endblock %}
 

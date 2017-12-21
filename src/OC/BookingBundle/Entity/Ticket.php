@@ -18,7 +18,7 @@ class Ticket
 
      * @ORM\ManyToOne(targetEntity="OC\BookingBundle\Entity\Booking")
      * @ORM\JoinColumn(nullable=false)
-     */
+ */
     private $booking;
 
     /**
@@ -72,6 +72,11 @@ class Ticket
      * @ORM\Column(name="lastName", type="string", length=255)
      */
     private $lastName;
+
+    public function __construct()
+    {
+        $this->date = new \Datetime();
+    }
 
     public function getId()
     {

@@ -16,3 +16,13 @@ oc_mail:
     path:     /test
     defaults:
         _controller: OCBookingBundle:Booking:mail
+
+oc_booking_card:
+    path:     /card
+    defaults:
+        _controller: OCBookingBundle:Booking:card
+
+oc_booking_contact:
+    path:     /contact
+    defaults:
+        _controller: OCBookingBundle:Booking:contact
