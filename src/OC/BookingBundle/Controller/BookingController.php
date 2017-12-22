@@ -54,6 +54,7 @@ class BookingController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $session= $request->getSession();
                 $tickets= ($session->get('tickets'))?$session->get('tickets'):array();
+                $ticket->sessionId = uniqid();
                 $tickets[]= $ticket;
                 $session->set('tickets',$tickets);
 
@@ -70,19 +71,18 @@ class BookingController extends Controller
                 "form"=>$form->createView(),
         ));
     }
-    public function deleteAction(Request $request){
-        $session = $this->getRequest()->getSesion();
+    public function deleteAction(Request $request, $sessionId){
+        $session = $request->getSession();
         $tickets = $session->get('tickets');
 
-        if (array_key_exists($id, $tickets)){
-            unset($tickets[$id]);
-            $session->set('tickets', $tickets);
-            $this->get('session')->getFlashBag()->add('success','Ticket supprimé avec succès !');
+;        foreach ($tickets as $key => $ticket){
+            if ( $ticket->sessionId==$sessionId ) {
+                unset($tickets[$key]);
+                $this->get('session')->getFlashBag()->add('success','Ticket supprimé avec succès !');
+            }
         }
-        return $this->render('OCBookingBundle:Ticket:index.html.twig',array(
-            "form"=>$form->createView(),
-            "tickets"=>$tickets,
-        ));
+        $session->set('tickets',$tickets);
+        return $this->redirectToRoute('oc_booking_homepage');
     }
     public function panierAction(Request $request)
     {
@@ -205,7 +205,27 @@ class BookingController extends Controller
 
     }
 
-    public function contactAction()
+    public function contactAction(Request $request)
+    {
+        $contact = new Contact;
+        $form = $this->get('form.factory')->create(ContactType::class, $contact);
+        if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($contact);
+            $em->flush();
+
+            $request->getSession()->getFlashBag()->add('notice', 'Annonce bien enregistrée.');
+
+            return $this->redirectToRoute('oc_platform_home');
+        }
+
+        return $this->render('OCBookingBundle:Contact:contact.html.twig', array(
+            'form' => $form->createView(),
+        ));
+
+    }
+
+    public function contactFormAction(Request $request)
     {
         $contact = new Contact;
         $form = $this->get('form.factory')->create(ContactType::class, $contact);
@@ -222,10 +242,6 @@ class BookingController extends Controller
         return $this->render('OCBookingBundle:Contact:contact', array(
             'form' => $form->createView(),
         ));
+
     }
-
-
-
-
-
 }

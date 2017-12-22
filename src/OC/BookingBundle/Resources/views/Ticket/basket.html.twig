@@ -19,7 +19,7 @@
                         {{ ticket.lastName}}
 
                         {{ ticket.price }}
-                        <button type="button" class="btn btn-danger">X</button>
+                        <a href="{{ path('oc_booking_delete', { 'sessionId' : ticket.sessionId }) }}"><span class="glyphicon glyphicon-remove"</a>
 
                     </li>
                 {% endfor %}

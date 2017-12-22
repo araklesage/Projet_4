@@ -26,3 +26,8 @@ oc_booking_contact:
     path:     /contact
     defaults:
         _controller: OCBookingBundle:Booking:contact
+
+oc_booking_delete:
+    path:     /delete/{sessionId}
+    defaults:
+        _controller: OCBookingBundle:Booking:delete

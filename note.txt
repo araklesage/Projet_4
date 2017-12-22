@@ -1,0 +1,17 @@
+V - intégration formulaire carte bancaire .
+V - nouvelle page? 
+? - liaison stripe carte test 
+X - integration swiftmailer 
+V~ - redaction mail de confirmation
+V - page contact avec formulaire. (problème $request)
+
+   - simplification controller
+? x-récupération donnée formulaire 
+V ? - Rajout flashBag
+swiftmaileur. 
+rappel du montant achat
+- validation formulaire + panier (si vide prevenir)
+- layout stripe
+-finalisé la page de formulaire
+-page contact operationnel.
+
