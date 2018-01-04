@@ -1,17 +1,39 @@
 {# src/OCBookingBundle/Ressources/views/Ticket/card.html.twig#}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{% block title %}OC Plateforme{% endblock %}</title>
+
+    {% block stylesheets %}
+
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../../../BookingBundle/Resources/public/css/Base.css">
+        <link rel="stylesheet" href="{{ asset('bundles/ocbooking/css/Base.css') }}">
+
+    {% endblock %}
+</head>
+<body>
+    <div class="container">
+        <h3>Carte client</h3>
 
 
-<h3>Carte client</h3>
-
-<div class="well">
-    <div class="col-lg">
-        {{ form(form) }}
+            <div class="col-lg-4" id="card-container">
+                <div class="well">
+                <h3> Montant de la Transaction :</h3>  <h3></h3>
+                 {{ form(card) }}
+                    <a href="{{ path('oc_booking_homepage') }}" class="btn btn-default">Annulation - Retour à la Boutique</a>
+                </div>
+                <small>Votre transaction est sécurisé par Paiement CIC. Et effectué par le système de paiement Stripe (c). Votre paiement sera réalisé en toute sécurité</small>
+        </div>
     </div>
-</div>
-
+</body>
 
 
 <!-- Récupération information Carte -->
+
+{% block javascripts %}
+
 
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 <script>
@@ -40,3 +62,4 @@
         });
     });
 </script>
+{% endblock %}
