@@ -1,4 +1,5 @@
 {# src/OCBookingBundle/Ressources/views/Ticket/card.html.twig#}
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,25 +9,135 @@
     {% block stylesheets %}
 
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-        <link rel="stylesheet" href="../../../BookingBundle/Resources/public/css/Base.css">
-        <link rel="stylesheet" href="{{ asset('bundles/ocbooking/css/Base.css') }}">
+        <link rel="stylesheet" href="{{ asset('bundles/ocbooking/css/card.css') }}">
 
     {% endblock %}
 </head>
 <body>
-    <div class="container">
-        <h3>Carte client</h3>
+<div class="container">
+    <div class="col-md-4">
+    </div>
+
+    <div class="col-md-4" id="payment-form">
+        <div class="form-row">
+            <h3> Montant de la Transaction :</h3>
+
+            <label for="card-element">
+                Carte de crédit ou de débit
+            </label>
+            <div class="card-element">
+                {{ form_start(card, {'attr': {'class':'form-horizontal'}}) }}
+                {{ form_errors(card) }}
 
 
-            <div class="col-lg-4" id="card-container">
-                <div class="well">
-                <h3> Montant de la Transaction :</h3>  <h3></h3>
-                 {{ form(card) }}
-                    <a href="{{ path('oc_booking_homepage') }}" class="btn btn-default">Annulation - Retour à la Boutique</a>
+
+                {# selecteur CardName #}
+
+                <div class="w3-container">
+
+                    {{ form_label(card.cardName, "Nom du possesseur", {'label_attr': {'class': ''}}) }}
+
+                    {{ form_errors(card.cardName) }}
+
+                    {{ form_widget(card.cardName, {'attr': {'data-stripe':'cardName'}}) }}
+
+
                 </div>
-                <small>Votre transaction est sécurisé par Paiement CIC. Et effectué par le système de paiement Stripe (c). Votre paiement sera réalisé en toute sécurité</small>
+                {# selecteur CardNumber #}
+
+                <div class="card-number">
+
+                    {{ form_label(card.cardNumber, "Numéro de carte", {'label_attr': {'class': ''}}) }}
+
+                    {{ form_errors(card.cardNumber) }}
+
+                    {{ form_widget(card.cardNumber, {'attr': {'date-stripe':'cardNumber'}}) }}
+
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        {# selecteur CVc #}
+                        <div class="card-cvc">
+                            <label>
+                                {{ form_label(card.cvc, "Cvc", {'label_attr': {'class': 'col-sm-2 controle-label'}}) }}
+                            </label>
+
+                            {{ form_errors(card.cvc) }}
+
+                            {{ form_widget(card.cvc, {'attr': {'date-stripe':'cvc'}}) }}
+
+                        </div>
+                    </div>
+
+                    {# selecteur Expirationdate #}
+
+                    <div class="col-lg-8">
+                        <label>
+                            {{ form_label(card.expirationDateMonth, "Date d'expiration", {'label_attr': {'class': 'controle-label'}}) }}
+                        </label>
+
+                        <div class="col-lg-6">
+
+                            {{ form_errors(card.expirationDateMonth) }}
+
+                            {{ form_widget(card.expirationDateMonth, {'attr': {'data-stripe':'exp_month'}}) }}
+                        </div>
+
+                        <div class="col-lg-6">
+
+                            {{ form_errors(card.expirationDateYear) }}
+
+                            {{ form_widget(card.expirationDateYear, {'attr': {'date-stripe':'exp-year'}}) }}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="w3-container" id="validation">
+
+                <button class="btn btn-primary">Valider le Paiement</button>
+
+            </div>
+            {{ form_end(card) }}
+
+        </div>
+        {{ form(card) }}
+
+        <div>
+            <a href="{{ path('oc_booking_homepage') }}" class="btn btn-default">Annulation - Retour à la
+                Boutique</a>
+        </div>
+        <br>
+        <div >
+            <small>Votre transaction est sécurisé par Paiement CIC. Et effectué par le système de paiement Stripe (c).
+                Votre
+                paiement sera réalisé en toute sécurité
+            </small>
         </div>
     </div>
+
+    <div class="col-md-4">
+    </div>
+    <form action="/Projet_4/web/app_dev.php/" method="POST">
+        <script
+                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                data-key="pk_test_pX1QSyNF2ZBSNN2cRCQ1fzSw"
+                data-amount="999"
+                data-name="arak"
+                data-description="Widget"
+                data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                data-locale="auto"
+                data-zip-code="true"
+                data-currency="eur">
+        </script>
+    </form>
+
+</div>
+
+
+</div>
+</div>
+
 </body>
 
 
@@ -35,31 +146,32 @@
 {% block javascripts %}
 
 
-<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
-<script>
-    Stripe.setPublishableKey('pk_test_QWMtNMNsUVZ8j9SxvbVJjMjE');
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script>
+        Stripe.setPublishableKey('pk_test_QWMtNMNsUVZ8j9SxvbVJjMjE');
 
-    var $form = $('#payment-form'); // On récupère le formulaire
-    $form.submit(function (e) {
-        e.preventDefault();
-        $form.find('button').prop('disabled', true); // On désactive le bouton submit
-        Stripe.card.createToken({
-            number: $('.card-number').val(),
-            cvc: $('.card-cvc').val(),
-            exp_month: $('.card-expiry-month').val(),
-            exp_year: $('.card-expiry-year').val()
-        }, function (status, response) {
-            if (response.error) { // Ah une erreur !
-                // On affiche les erreurs
-                $form.find('.payment-errors').text(response.error.message);
-                $form.find('button').prop('disabled', false); // On réactive le bouton
-            } else { // Le token a bien été créé
-                var token = response.id; // On récupère le token
-                // On crée un champs cachée qui contiendra notre token
-                $form.append($('<input type="hidden" name="stripeToken" />').val(token));
-                $form.get(0).submit(); // On soumet le formulaire
-            }
+        var $form = $('#payment-form'); // On récupère le formulaire
+        $form.submit(function (e) {
+            e.preventDefault();
+            $form.find('button').prop('disabled', true); // On désactive le bouton submit
+            Stripe.card.createToken({
+                number: $('.cardNumber').val(),
+                cvc: $('.cvc').val(),
+                exp_month: $('.exp-month').val(),
+                exp_year: $('.exp-year').val()
+            }, function (status, response) {
+                if (response.error) { // Ah une erreur !
+                    // On affiche les erreurs
+                    $form.find('.payment-errors').text(response.error.message);
+                    $form.find('button').prop('disabled', false); // On réactive le bouton
+                } else { // Le token a bien été créé
+                    var token = response.id; // On récupère le token
+                    // On crée un champs cachée qui contiendra notre token
+                    $form.append($('<input type="hidden" name="stripeToken" />').val(token));
+                    $form.get(0).submit(); // On soumet le formulaire
+                }
+            });
         });
-    });
-</script>
+    </script>
 {% endblock %}

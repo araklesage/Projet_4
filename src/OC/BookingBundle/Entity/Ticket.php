@@ -3,6 +3,8 @@
 namespace OC\BookingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use OC\BookingBundle\Validator\NotIntoThePast;
+use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
@@ -16,7 +18,7 @@ class Ticket
 
     /**
 
-     * @ORM\ManyToOne(targetEntity="OC\BookingBundle\Entity\Booking")
+     * @ORM\ManyToOne(targetEntity="OC\BookingBundle\Entity\Booking", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
  */
     private $booking;
@@ -33,7 +35,10 @@ class Ticket
     /**
      * @var \DateTime
      *
+     * @NotIntoThePast()
+     *
      * @ORM\Column(name="date",type="datetime")
+     *
      */
     private $date;
 
@@ -48,7 +53,10 @@ class Ticket
     /**
      * @var string
      *
+     * @Assert\NotBlank()
+     *
      * @ORM\Column(name="firstName", type="string", length=255)
+     *
      */
     private $firstName;
 
@@ -56,6 +64,7 @@ class Ticket
      * @var \DateTime
      *
      * @ORM\Column(name="birthDate", type="datetime")
+     *
      */
     private $birthDate;
 
@@ -63,13 +72,17 @@ class Ticket
      * @var string
      *
      * @ORM\Column(name="country", type="string", length=255)
+     *
      */
     private $country;
 
     /**
      * @var string
      *
+     * @Assert\NotBlank()
+     *
      * @ORM\Column(name="lastName", type="string", length=255)
+     *
      */
     private $lastName;
 

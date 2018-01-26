@@ -17,10 +17,10 @@ oc_mail:
     defaults:
         _controller: OCBookingBundle:Booking:mail
 
-oc_booking_customer:
-    path:     /card
+oc_booking_validation:
+    path:     /validation
     defaults:
-        _controller: OCBookingBundle:Booking:customer
+        _controller: OCBookingBundle:Booking:validation
 
 oc_booking_contact:
     path:     /contact
@@ -32,4 +32,7 @@ oc_booking_delete:
     defaults:
         _controller: OCBookingBundle:Booking:delete
 
-
+oc_booking_confirm:
+    path:   /confirm
+    defaults:
+        _controller: OCBookingBundle:Booking:confirm

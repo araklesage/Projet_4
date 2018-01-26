@@ -2,6 +2,8 @@
 
 namespace OC\BookingBundle\Entity;
 
+use Symfony\Component\Validator\Constraint as Assert;
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -40,17 +42,23 @@ class Customer
     /**
      * @var int
      *
-     * @ORM\Column(name="cvv", type="integer")
+     * @ORM\Column(name="cvc", type="integer")
      */
-    private $cvv;
+    private $cvc;
 
     /**
-     * @var \DateTime
+     * @var int
      *
-     * @ORM\Column(name="expirationDate", type="datetime")
+     * @ORM\Column(name="expirationDateMonth", type="integer")
      */
-    private $expirationDate;
+    private $expirationDateMonth;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="expirationDateYear", type="integer")
+     */
+    private $expirationDateYear;
 
     /**
      * Get id
@@ -89,27 +97,27 @@ class Customer
     }
 
     /**
-     * Set cvv
+     * Set cvc
      *
-     * @param integer $cvv
+     * @param integer $cvc
      *
      * @return Customer
      */
-    public function setCvv($cvv)
+    public function setCvc($cvc)
     {
-        $this->cvv = $cvv;
+        $this->cvc = $cvc;
 
         return $this;
     }
 
     /**
-     * Get cvv
+     * Get cvc
      *
      * @return int
      */
-    public function getCvv()
+    public function getCvc()
     {
-        return $this->cvv;
+        return $this->cvc;
     }
 
     /**
@@ -135,5 +143,28 @@ class Customer
     {
         return $this->expirationDate;
     }
-}
 
+    /**
+     * Set cardName
+     *
+     * @param string $cardName
+     *
+     * @return Customer
+     */
+    public function setCardName($cardName)
+    {
+        $this->cardName = $cardName;
+
+        return $this;
+    }
+
+    /**
+     * Get cardName
+     *
+     * @return string
+     */
+    public function getCardName()
+    {
+        return $this->cardName;
+    }
+}

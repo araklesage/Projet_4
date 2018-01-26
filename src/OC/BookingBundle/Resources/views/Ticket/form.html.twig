@@ -2,12 +2,146 @@
 <head>
     {% block stylesheets %}
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     {% endblock %}
 </head>
-<h3>Formulaire d'annonce</h3>
 
-<div class="well">
-    <div class="col-lg">
-    {{ form(form) }}
+{% block body %}
+    <div class="w3-sidebar w3-bar-block w3-card w3-animate-right" style="display:none;right:0" id="mySidebarR">
+
+        <button class="w3-bar-item w3-button w3-large" onclick="w3_close_right()">
+            Close &times;
+        </button>
+
+        <div class="w3-bar-item w3-header ">
+
+            <div class="col-xs-12">
+
+                <h3>
+                    Ajoutez un ticket
+                </h3>
+
+            </div>
+
+        </div>
+
+        <div class="w3-bar-item">
+
+            {{ form_start(form, {'attr': {'class':'form-horizontal'}}) }}
+            {{ form_errors(form) }}
+
+            {# selecteur Date #}
+
+            <div class="w3-container">
+
+                {{ form_label(form.date, "Date") }}
+
+                {{ form_errors(form.date) }}
+
+                {{ form_widget(form.date) }}
+
+            </div>
+
+            {# selecteur Prénom #}
+
+            <div class="w3-container">
+
+                {{ form_label(form.firstName, "Prénom", {'label_attr': {'class': ''}}) }}
+
+                {{ form_errors(form.firstName) }}
+
+                {{ form_widget(form.firstName, {'attr': {'class':'form-control'}}) }}
+
+            </div>
+
+            {# selecteur Nom #}
+
+            <div class="w3-container">
+
+                {{ form_label(form.lastName, "Nom", {'label_attr': {'class': 'col-sm-2 controle-label'}}) }}
+
+                {{ form_errors(form.lastName) }}
+
+                {{ form_widget(form.lastName, {'attr': {'class':'form-control'}}) }}
+
+            </div>
+
+            {# selecteur Ville #}
+
+            <div class="w3-container">
+
+                {{ form_label(form.country, "Ville", {'label_attr': {'class': 'col-sm-2 controle-label'}}) }}
+
+                {{ form_errors(form.country) }}
+
+                {{ form_widget(form.country, {'attr': {'class':'form-control'}}) }}
+
+            </div>
+
+            {# selecteur BirthDate #}
+
+            <div class="w3-container">
+
+
+                {{ form_label(form.birthDate, "Date de naissance") }}
+                {{ form_errors(form.birthDate) }}
+
+                {{ form_widget(form.birthDate) }}
+
+            </div>
+
+            {# selecteur Rabbat A REVOIR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!#}
+
+            <div class="w3-container">
+
+                {{ form_row(form.reduct) }}
+
+                {{ form_widget(form.reduct) }}
+
+                {{ form_label(form.reduct, "Tarif Réduit") }}
+            </div>
+
+            <div class=" w3-container" id="add-ticket">
+
+                {{ form_widget(form.ajouter, {'attr': {'class': 'w3-button'}}) }}
+
+            </div>
+
+            {{ form_end(form) }}
+
+        </div>
+
     </div>
-</div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+
+        function w3_open_left() {
+            document.getElementById("main").style.marginLeft = "25%";
+            document.getElementById("mySidebarL").style.width = "25%";
+            document.getElementById("mySidebarL").style.display = "block";
+            document.getElementById("openNavLeft").style.display = 'none';
+        }
+
+        function w3_close_left() {
+            document.getElementById("main").style.marginLeft = "0%";
+            document.getElementById("mySidebarL").style.display = "none";
+            document.getElementById("openNavLeft").style.display = "inline-block";
+        }
+
+        function w3_open_right() {
+            document.getElementById("main").style.marginRight = "25%";
+            document.getElementById("mySidebarR").style.width = "25%";
+            document.getElementById("mySidebarR").style.display = "block";
+            document.getElementById("openNavRight").style.display = 'none';
+        }
+
+        function w3_close_right() {
+            document.getElementById("main").style.marginRight = "0%";
+            document.getElementById("mySidebarR").style.display = "none";
+            document.getElementById("openNavRight").style.display = "inline-block";
+        }
+
+    </script>
+{% endblock %}

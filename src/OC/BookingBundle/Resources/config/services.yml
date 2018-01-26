@@ -1,3 +1,5 @@
 services:
     oc_booking.prices:
         class: OC\BookingBundle\Utils\PriceService
+    oc_generator.number:
+        class: OC\BookingBundle\Utils\GeneratorNumberService

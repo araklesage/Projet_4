@@ -2,32 +2,79 @@
 #}
 
 <!-- Sidebar Header -->
-<div class="col-lg-4">
-        <nav  id="sidebar">
+<div class="w3-sidebar w3-bar-block w3-card w3-animate-left" style="display:none;left:0" id="mySidebarL">
+        <button class="w3-bar-item w3-button w3-large" onclick="w3_close_left()">Close &times;</button>
+
             <!-- Sidebar Header -->
-            <div class="sidebar-header">
-                <h3>Votre Réservation</h3>
+            <div class="w3-bar-item w3-header">
+                <div class="row">
+                    <div class="col-xs-8">
+                        <h3>Votre Réservation</h3>
+                    </div>
+                    <div class="col-xs-4">
+                        <h2 class="w3-round-small w3-green w3-center">{{  total }} €</h2>
+                    </div>
+                </div>
+
             </div>
 
     <!-- Sidebar Tickets -->
 
-            <ul >
+            <ul class="w3-bar-item">
 
                 {% for ticket in tickets %}
                     <li>
-                        {{ ticket.date|date('d F Y') }}
-
-                        {{ ticket.lastName}}
-
-                        {{ ticket.price }}
-                        <a href="{{ path('oc_booking_delete', { 'sessionId' : ticket.sessionId }) }}"><span class="glyphicon glyphicon-remove"</a>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                {{ ticket.date|date('d F Y') }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ ticket.lastName|upper}}
+                            </div>
+                            <div class="col-xs-1">
+                                {{ ticket.price }}
+                            </div>
+                            <div class="col-xs-1">
+                                 <span class="glyphicon glyphicon-euro"></span>
+                            </div>
+                            <div class="col-xs-2">
+                                <a class="w3-button w3-tiny w3-red" href="{{ path('oc_booking_delete', { 'sessionId' : ticket.sessionId }) }}"><i class="glyphicon glyphicon-trash"></i></a>
+                            </div>
+                        </div>
 
                     </li>
                 {% endfor %}
             </ul>
-            <a href="{{ path('oc_booking_customer') }}" class= "btn btn-primary">Valider le panier</a>
+    {{ form_start(booking, {'attr': {'class':'form-horizontal'}}) }}
+    {{ form_errors(booking) }}
 
-        </nav>
+    {{ form_label(booking.email, "Adresse mail") }}
+    {{ form_errors(booking.email) }}
+
+    {{ form_widget(booking.email) }}
+
+
+    {{ form_end(booking) }}
+
+    <a class="w3-button w3-block" href="{{ path('oc_booking_validation') }}">
+            Valider le panier
+    </a>
+    <form action="{{ path('oc_booking_confirm') }}" method="POST">
+        <script
+
+                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                data-key="pk_test_pX1QSyNF2ZBSNN2cRCQ1fzSw"
+                data-amount="{{ total*100 }} "
+                data-email="
+"
+                data-name="Louvre Réservation"
+                data-description="{{ total }} €"
+                data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                data-locale="auto"
+                data-zip-code="false"
+                data-currency="eur">
+        </script>
+    </form>
 </div>
 
 
