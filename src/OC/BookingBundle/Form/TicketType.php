@@ -34,7 +34,7 @@ class TicketType extends AbstractType
             ->add('reduct',     CheckboxType::class, array(
                 'required' => false
             ))
-            ->add('ajouter',       SubmitType::class);
+            ->add('save',       SubmitType::class);
     }
     
     /**

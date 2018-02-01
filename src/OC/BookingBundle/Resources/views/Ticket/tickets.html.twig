@@ -1,0 +1,114 @@
+{# src/OC/BookingBundle/Resources/views/Ticket/tickets.html.twig #}
+
+
+{% block body %}
+
+    <!-- Container Tickets -->
+
+
+
+    <div class="col-lg-3" id="vinci">
+        <section>
+            <div class="col-lg-12 titre">
+                <h2>Ticket De Vinci</h2>
+            </div>
+            <div class="col-lg-12">
+                <p>
+                    Ticket tarif plein, permet l'accès à l'ensemble du musée.
+                </p>
+            </div>
+            <div class="col-lg-12">
+                <h3>16 €</h3>
+            </div>
+        </section>
+    </div>
+
+    <div class="col-lg-3" id="aelita">
+        <section>
+            <div class="col-lg-12 titre">
+                <h2>Ticket Aelita André</h2>
+            </div>
+            <div class="col-lg-12">
+                <p>
+                    Ticket enfant, permet l'accès à l'ensemble du musée.
+                </p>
+                <br>
+                <article>Justificatif à fournir</article>
+            </div>
+            <br>
+            <div class="col-lg-12">
+                <h3>8 €</h3>
+            </div>
+        </section>
+    </div>
+
+    <div class="col-lg-3" id="picasso">
+        <section>
+            <div class="col-lg-12 titre">
+                <h2>Ticket Picasso</h2>
+            </div>
+            <div class="col-lg-12">
+                <p>
+                    Ticket Senior, permet l'accès à l'ensemble du musée.
+                </p>
+                <br>
+                <article>Justificatif à fournir</article>
+            </div>
+            <div class="col-lg-12">
+                <h3>12 €</h3>
+            </div>
+        </section>
+    </div>
+
+    <div class="col-lg-3" id="van">
+            <div class="col-lg-12 titre">
+                <h1>Ticket Van Der Rohe</h1>
+            </div>
+            <div class="col-lg-12">
+                <h3>
+                    Ticket tarif réduit, permet l'accès à l'ensemble du musée.
+                </h3>
+                <br>
+                <article>Justificatif à fournir</article>
+            </div>
+            <div class="col-lg-12">
+                <h3>10 €</h3>
+            </div>
+    </div>
+
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function w3_open_left() {
+            document.getElementById("main").style.marginLeft = "25%";
+            document.getElementById("mySidebarL").style.width = "25%";
+            document.getElementById("mySidebarL").style.display = "block";
+            document.getElementById("openNavLeft").style.display = 'none';
+
+        }
+
+        function w3_close_left() {
+            document.getElementById("main").style.marginLeft = "0%";
+            document.getElementById("mySidebarL").style.display = "none";
+            document.getElementById("openNavLeft").style.display = "inline-block";
+        }
+
+        function w3_open_right() {
+            document.getElementById("main").style.marginRight = "25%";
+            document.getElementById("mySidebarR").style.width = "25%";
+            document.getElementById("mySidebarR").style.display = "block";
+            document.getElementById("openNavRight").style.display = 'none';
+
+        }
+
+        function w3_close_right() {
+            document.getElementById("main").style.marginRight = "0%";
+            document.getElementById("mySidebarR").style.display = "none";
+            document.getElementById("openNavRight").style.display = "inline-block";
+        }
+    </script>
+{% endblock %}

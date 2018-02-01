@@ -22,7 +22,7 @@ class ContactType extends AbstractType
             ->add('mailAdress',     EmailType::class)
             ->add('subject',        TextType::class)
             ->add('text',           TextType::class)
-            ->add('save',           SubmitType::class);
+            ->add('envoyer',           SubmitType::class);
     }
     
     /**

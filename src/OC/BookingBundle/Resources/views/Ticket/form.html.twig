@@ -9,11 +9,11 @@
 {% block body %}
     <div class="w3-sidebar w3-bar-block w3-card w3-animate-right" style="display:none;right:0" id="mySidebarR">
 
-        <button class="w3-bar-item w3-button w3-large" onclick="w3_close_right()">
-            Close &times;
+        <button class="btn btn-secondary btn-block" onclick="w3_close_right()">
+           <span >Fermer  </span><span class="glyphicon glyphicon-chevron-right"></span>
         </button>
 
-        <div class="w3-bar-item w3-header ">
+        <div class="col-lg-12">
 
             <div class="col-xs-12">
 
@@ -25,14 +25,14 @@
 
         </div>
 
-        <div class="w3-bar-item">
+        <div class="col-lg-12">
 
             {{ form_start(form, {'attr': {'class':'form-horizontal'}}) }}
             {{ form_errors(form) }}
 
             {# selecteur Date #}
 
-            <div class="w3-container">
+            <div class="col-lg-12">
 
                 {{ form_label(form.date, "Date") }}
 
@@ -44,7 +44,7 @@
 
             {# selecteur Prénom #}
 
-            <div class="w3-container">
+            <div class="col-lg-12">
 
                 {{ form_label(form.firstName, "Prénom", {'label_attr': {'class': ''}}) }}
 
@@ -56,7 +56,7 @@
 
             {# selecteur Nom #}
 
-            <div class="w3-container">
+            <div class="col-lg-12">
 
                 {{ form_label(form.lastName, "Nom", {'label_attr': {'class': 'col-sm-2 controle-label'}}) }}
 
@@ -68,7 +68,7 @@
 
             {# selecteur Ville #}
 
-            <div class="w3-container">
+            <div class="col-lg-12">
 
                 {{ form_label(form.country, "Ville", {'label_attr': {'class': 'col-sm-2 controle-label'}}) }}
 
@@ -80,7 +80,7 @@
 
             {# selecteur BirthDate #}
 
-            <div class="w3-container">
+            <div class="col-lg-12">
 
 
                 {{ form_label(form.birthDate, "Date de naissance") }}
@@ -92,18 +92,17 @@
 
             {# selecteur Rabbat A REVOIR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!#}
 
-            <div class="w3-container">
+            <div class="col-lg-12">
 
-                {{ form_row(form.reduct) }}
 
-                {{ form_widget(form.reduct) }}
+                {{ form_rest (form) }}
 
-                {{ form_label(form.reduct, "Tarif Réduit") }}
+
             </div>
 
-            <div class=" w3-container" id="add-ticket">
+            <div class="col-lg-12" id="add-ticket">
 
-                {{ form_widget(form.ajouter, {'attr': {'class': 'w3-button'}}) }}
+                {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
 
             </div>
 

@@ -3,7 +3,9 @@
 
 <!-- Sidebar Header -->
 <div class="w3-sidebar w3-bar-block w3-card w3-animate-left" style="display:none;left:0" id="mySidebarL">
-        <button class="w3-bar-item w3-button w3-large" onclick="w3_close_left()">Close &times;</button>
+        <button class="btn btn-secondary btn-block" onclick="w3_close_left()">
+            <span class="glyphicon glyphicon-chevron-left">  Fermer</span>
+    </button>
 
             <!-- Sidebar Header -->
             <div class="w3-bar-item w3-header">
@@ -48,33 +50,36 @@
     {{ form_start(booking, {'attr': {'class':'form-horizontal'}}) }}
     {{ form_errors(booking) }}
 
-    {{ form_label(booking.email, "Adresse mail") }}
+    {{ form_label(booking.email, "Adresse Email") }}
     {{ form_errors(booking.email) }}
-
     {{ form_widget(booking.email) }}
-
 
     {{ form_end(booking) }}
 
-    <a class="w3-button w3-block" href="{{ path('oc_booking_validation') }}">
+    <button class="btn btn-primary btn-block super-button" id="action" href="{{ path('oc_booking_confirm')}}"  {#onclick="window.open('{{ path('oc_booking_confirm')}}','wclose','width=700,height=600,toolbar=no,status=no,left=20,top=30')"#}>
             Valider le panier
-    </a>
-    <form action="{{ path('oc_booking_confirm') }}" method="POST">
-        <script
+    </button>
 
-                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                data-key="pk_test_pX1QSyNF2ZBSNN2cRCQ1fzSw"
-                data-amount="{{ total*100 }} "
-                data-email="
-"
-                data-name="Louvre Réservation"
-                data-description="{{ total }} €"
-                data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-                data-locale="auto"
-                data-zip-code="false"
-                data-currency="eur">
-        </script>
-    </form>
 </div>
+
+<script>
+$(document).ready(function()
+{
+   $('.super-button').click(function()
+   {
+      $.ajax(
+          {
+         type:"POST",
+         url:"{{ path('oc_booking_validation') }}",
+          success: function(data)
+          {
+              $('.super-button').hide();
+              $('.stripe-button').show();
+
+          }
+          });
+      });
+});
+</script>
 
 

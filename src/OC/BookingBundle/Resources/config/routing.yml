@@ -6,14 +6,14 @@ oc_booking_homepage:
     requirements:
         page: \d*
 
-oc_booking_view:
-    path:      /booking/ticket/{id}
+oc_booking_tickets:
+    path:      /booking/tickets
     defaults:
-        _controller: OCBookingBundle:Ticket:view
+        _controller: OCBookingBundle:Booking:tickets
     requirements:
         id: \d+
 oc_mail:
-    path:     /test
+    path:     /mail
     defaults:
         _controller: OCBookingBundle:Booking:mail
 

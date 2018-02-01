@@ -1,0 +1,6 @@
+#content .hidden{
+    display: none;
+}
+#content #loader{
+    display: none;
+}

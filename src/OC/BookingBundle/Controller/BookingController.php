@@ -42,6 +42,7 @@ class BookingController extends Controller
     // Page d'accueil
     public function indexAction()
     {
+
         return $this->render('OCBookingBundle:Ticket:index.html.twig');
     }
 
@@ -50,6 +51,33 @@ class BookingController extends Controller
     public function confirmAction(Request $request)
     {
         $session = $request->getSession();
+        $tickets = ($session->get('tickets')) ? $session->get('tickets') : array();
+        $tickets = ($session->get('booking')) ? $session->get('booking') : array();
+        $priceService = $this->container->get('oc_booking.prices');
+        $total = $priceService->getTotal($tickets, $this->getParameter('prices'));
+
+        if ($request->isMethod('POST') && $bookingform->handleRequest($request)->isValid()) {
+            $session = $request->getSession();
+            $booking = ($session->get('booking')) ? $session->get('booking') : array();
+            $generatorService = $this->container->get('oc_generator.number');
+            $booking->setNumberBooking($generatorService->GenerateAction());
+            $session->set('booking', $booking);
+
+            return $this->redirectToRoute('oc_platform_home');
+        }
+        return $this->render('OCBookingBundle:Ticket:index.html.twig', array(
+            "tickets" => $tickets,
+            "total" => $total,
+            "booking" => $booking,
+        ));
+
+
+        /*  return $this->render('OCBookingBundle:Ticket:test.html.twig', array(
+              "tickets" => $tickets,
+              "total" => $total,
+      ));*/
+
+        /*$session = $request->getSession();
         $tickets = ($session->get('tickets')) ? $session->get('tickets') : array();
         $em = $this->getDoctrine()->getManager();
         $booking = ($session->get('booking')) ? $session->get('booking') : array();
@@ -75,7 +103,7 @@ class BookingController extends Controller
 
         $request->getSession()->getFlashbag()->add('success', 'Commande validée');
 
-        return $this->render('OCBookingBundle:Ticket:confirm.html.twig');
+        return $this->render('OCBookingBundle:Ticket:confirm.html.twig');*/
     }
 
     // Formulaire d'Ajout Ticket
@@ -85,27 +113,20 @@ class BookingController extends Controller
         $ticket = new Ticket();
         $form = $this->get('form.factory')->create(TicketType::class, $ticket);
 
-        if ($request->isMethod('POST')) {
-            $form->handleRequest($request);
+        if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+            $session = $request->getSession();
+            $tickets = ($session->get('tickets')) ? $session->get('tickets') : array();
+            $ticket->sessionId = uniqid();
+            $tickets[] = $ticket;
+            $session->set('tickets', $tickets);
 
-            if ($form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $session = $request->getSession();
-                $tickets = ($session->get('tickets')) ? $session->get('tickets') : array();
-                $ticket->sessionId = uniqid();
-                $tickets[] = $ticket;
-                $session->set('tickets', $tickets);
+            $request->getSession()->getFlashBag()->add('success', 'Ticket ajouté');
 
-                $request->getSession()->getFlashBag()->add('success', 'Ticket ajouté');
-
-                return $this->render('OCBookingBundle:Ticket:form.html.twig', array(
-                    "form" => $form->createView(),
-                    "tickets" => $tickets,
-                ));
-            }
+            return $this->render('OCBookingBundle:Ticket:form.html.twig', array(
+                "form" => $form->createView(),
+                "tickets" => $tickets,
+            ));
         }
-        $request->getSession()->getFlashBag()->add('fail', 'Vous ne pouvez pas réserver pour le jour présent ou une date ultérieure.');
-
         return $this->render('OCBookingBundle:Ticket:form.html.twig', array(
             "form" => $form->createView(),
         ));
@@ -116,6 +137,13 @@ class BookingController extends Controller
     public function menuAction()
     {
         return $this->render('basket.html.twig');
+    }
+
+    // Affichage Page tickets
+
+    public function ticketsAction()
+    {
+        return $this->render('OCBookingBundle:Ticket:tickets.html.twig');
     }
 
     //Appel du formulaire de contact
@@ -154,13 +182,13 @@ class BookingController extends Controller
             return $this->redirectToRoute('oc_booking_homepage');
         } else if ($request->isMethod('POST') && $bookingform->handleRequest($request)->isValid()) {
             $generatorService = $this->container->get('oc_generator.number');
+            $booking = ($session->get('booking'));
             $booking->setNumberBooking($generatorService->GenerateAction());
+            $booking->sessionId = uniqid();
             $session->set("booking", $booking);
             $em = $this->getDoctrine()->getManager();
-            $booking = new Booking();
-            $booking = ($session->get('booking'));
-            $booking->sessionId = uniqid();
-            $tickets[] = $ticket;
+
+
             $session->set('tickets', $tickets);
             foreach ($tickets as $ticket) {
                 $ticket->setBooking($booking);
@@ -169,13 +197,10 @@ class BookingController extends Controller
             $em->persist($booking);
             $em->flush();
             $customer = new Customer();
-            $card = $this->get('form.factory')->create(CustomerType::class, $customer);
+
 
             return $this->redirectToRoute('oc_booking_homepage');
         }
-        return $this->redirectToRoute('oc_booking_homepage');
-
-        $request->getSession()->getFlashBag()->add('fail', "L'Email n'est pas correcte");
     }
 
     // Gestionnaire de l'affichage de la liste de ticket du Panier
@@ -183,35 +208,54 @@ class BookingController extends Controller
     public function panierAction(Request $request)
     {
         $booking = new booking;
+        $session = $request->getSession();
+        $tickets = $session->get('tickets');
         $bookingform = $this->get('form.factory')->create(BookingType::class, $booking);
         $priceService = $this->container->get('oc_booking.prices');
-        $session = $request->getSession();
-        if ($session->get('tickets')) {
-            $tickets = $session->get('tickets');
-            if (count($tickets) > 0) {
-                foreach ($tickets as $ticket) {
-                    $ticket->price = $priceService->priceAction($ticket->getBirthDate(), $ticket->getReduct(), $this->getParameter('prices'));
-                }
-            } else {
-                $tickets = array();
+
+        if (count($tickets) > 0) {
+            foreach ($tickets as $ticket) {
+                $ticket->price = $priceService->priceAction($ticket->getBirthDate(), $ticket->getReduct(), $this->getParameter('prices'));
             }
-
-            $total = $priceService->getTotal($tickets, $this->getParameter('prices'));
-
-            if ($request->isMethod('POST') && $bookingform->handleRequest($request)->isValid()) {
-                $generatorService = $this->container->get('oc_generator.number');
-                $booking->setNumberBooking($generatorService->GenerateAction());
-                $booking = ($session->get('booking'));
-                $session->set('booking', $booking);
-
-            }
-
-            return $this->render('OCBookingBundle:Ticket:basket.html.twig', array(
-                "tickets" => $tickets,
-                "total" => $total,
-                "booking" => $bookingform->createView(),
-            ));
+        } else {
+            $tickets = array();
         }
+
+        $total = $priceService->getTotal($tickets, $this->getParameter('prices'));
+
+        /* if ($request->isMethod('POST') && $form->handleRequest($request)->isValid())
+         {
+             $session = $request->getSession();
+             $tickets = ($session->get('tickets')) ? $session->get('tickets') : array();
+             $ticket->sessionId = uniqid();
+             $tickets[] = $ticket;
+             $session->set('tickets', $tickets);
+
+             $request->getSession()->getFlashBag()->add('success', 'Ticket ajouté');
+
+             return $this->render('OCBookingBundle:Ticket:form.html.twig', array(
+                 "form" => $form->createView(),
+                 "tickets" => $tickets,
+             ));
+         }
+         return $this->render('OCBookingBundle:Ticket:form.html.twig', array(
+             "form" => $form->createView(),
+         ));*/
+
+        if ($request->isMethod('POST') && $bookingform->handleRequest($request)->isValid()) {
+            $session = $request->getSession();
+            $booking = ($session->get('booking')) ? $session->get('booking') : array();
+            $generatorService = $this->container->get('oc_generator.number');
+            $booking->setNumberBooking($generatorService->GenerateAction());
+            $session->set('booking', $booking);
+
+        }
+        return $this->render('OCBookingBundle:Ticket:basket.html.twig', array(
+            "tickets" => $tickets,
+            "total" => $total,
+            "booking" => $bookingform->createView(),
+        ));
+
     }
 
     // Action de suppresion de ticket.
