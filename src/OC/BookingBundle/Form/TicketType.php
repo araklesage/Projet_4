@@ -20,6 +20,7 @@ class TicketType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->setAction($options['action'])
             ->add('date',       DateType::class, array(
                 'widget' => 'choice',
                 'format' => 'dd MM yyyy'
@@ -43,7 +44,8 @@ class TicketType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'OC\BookingBundle\Entity\Ticket'
+            'data_class' => 'OC\BookingBundle\Entity\Ticket',
+            'action' => null,
         ));
     }
 

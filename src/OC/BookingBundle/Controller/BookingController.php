@@ -111,9 +111,14 @@ class BookingController extends Controller
     public function formAction(Request $request)
     {
         $ticket = new Ticket();
-        $form = $this->get('form.factory')->create(TicketType::class, $ticket);
+        $form = $this->get('form.factory')->create(TicketType::class, $ticket, [
+            'action' => $this->generateUrl('oc_booking_form')
+        ]);
 
-        if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+        if ($request->isMethod('POST')) {
+
+            $form->handleRequest($request);
+
             $session = $request->getSession();
             $tickets = ($session->get('tickets')) ? $session->get('tickets') : array();
             $ticket->sessionId = uniqid();
@@ -122,10 +127,7 @@ class BookingController extends Controller
 
             $request->getSession()->getFlashBag()->add('success', 'Ticket ajouté');
 
-            return $this->render('OCBookingBundle:Ticket:form.html.twig', array(
-                "form" => $form->createView(),
-                "tickets" => $tickets,
-            ));
+            return $this->redirectToRoute('oc_booking_homepage');
         }
         return $this->render('OCBookingBundle:Ticket:form.html.twig', array(
             "form" => $form->createView(),

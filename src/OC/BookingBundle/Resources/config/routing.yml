@@ -36,3 +36,8 @@ oc_booking_confirm:
     path:   /confirm
     defaults:
         _controller: OCBookingBundle:Booking:confirm
+
+oc_booking_form:
+    path:   /booking_form
+    defaults:
+        _controller: OCBookingBundle:Booking:form
