@@ -12,10 +12,10 @@ oc_booking_tickets:
         _controller: OCBookingBundle:Booking:tickets
     requirements:
         id: \d+
-oc_mail:
-    path:     /mail
+oc_payment:
+    path:     /payment
     defaults:
-        _controller: OCBookingBundle:Booking:mail
+        _controller: OCBookingBundle:Booking:payment
 
 oc_booking_validation:
     path:     /validation
@@ -36,3 +36,13 @@ oc_booking_confirm:
     path:   /confirm
     defaults:
         _controller: OCBookingBundle:Booking:confirm
+
+oc_booking_form:
+    path:   /booking_form
+    defaults:
+        _controller: OCBookingBundle:Booking:form
+
+oc_booking_basket :
+    path:   /email
+    defaults:
+        _controller: OCBookingBundle:Booking:basket

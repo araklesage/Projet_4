@@ -10,12 +10,12 @@
     <div class="w3-sidebar w3-bar-block w3-card w3-animate-right" style="display:none;right:0" id="mySidebarR">
 
         <button class="btn btn-secondary btn-block" onclick="w3_close_right()">
-           <span >Fermer  </span><span class="glyphicon glyphicon-chevron-right"></span>
+            <span>Fermer  </span><span class="glyphicon glyphicon-chevron-right"></span>
         </button>
 
-        <div class="col-lg-12">
+        <div class="header">
 
-            <div class="col-xs-12">
+            <div class="col-lg-12">
 
                 <h3>
                     Ajoutez un ticket
@@ -25,26 +25,25 @@
 
         </div>
 
-        <div class="col-lg-12">
+        <div class="col">
+        {{ form_start(form, {'attr': {'class':'form-horizontal'}}) }}
+        {{ form_errors(form) }}
 
-            {{ form_start(form, {'attr': {'class':'form-horizontal'}}) }}
-            {{ form_errors(form) }}
+        {# selecteur Date #}
 
-            {# selecteur Date #}
+            <div class="form-group">
 
-            <div class="col-lg-12">
+            {{ form_label(form.date, "Date") }}
 
-                {{ form_label(form.date, "Date") }}
+            {{ form_errors(form.date) }}
 
-                {{ form_errors(form.date) }}
-
-                {{ form_widget(form.date) }}
+            {{ form_widget(form.date) }}
 
             </div>
 
-            {# selecteur Prénom #}
+        {# selecteur Prénom #}
 
-            <div class="col-lg-12">
+            <div class="form-group">
 
                 {{ form_label(form.firstName, "Prénom", {'label_attr': {'class': ''}}) }}
 
@@ -56,7 +55,7 @@
 
             {# selecteur Nom #}
 
-            <div class="col-lg-12">
+            <div class="form-group">
 
                 {{ form_label(form.lastName, "Nom", {'label_attr': {'class': 'col-sm-2 controle-label'}}) }}
 
@@ -68,7 +67,7 @@
 
             {# selecteur Ville #}
 
-            <div class="col-lg-12">
+            <div class="form-group">
 
                 {{ form_label(form.country, "Ville", {'label_attr': {'class': 'col-sm-2 controle-label'}}) }}
 
@@ -80,7 +79,7 @@
 
             {# selecteur BirthDate #}
 
-            <div class="col-lg-12">
+            <div class="form-group">
 
 
                 {{ form_label(form.birthDate, "Date de naissance") }}
@@ -89,58 +88,54 @@
                 {{ form_widget(form.birthDate) }}
 
             </div>
+            <div class="form-group">
+                {{ form_label(form.glassHalfFull, "Type billet") }}
+                {{ form_errors(form.glassHalfFull) }}
 
-            {# selecteur Rabbat A REVOIR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!#}
-
-            <div class="col-lg-12">
-
-
-                {{ form_rest (form) }}
-
+                {{ form_widget(form.glassHalfFull) }}
 
             </div>
 
-            <div class="col-lg-12" id="add-ticket">
+            <div class="form-group">
 
-                {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
+                {# selecteur Rabbat A REVOIR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!#}
+
+
+                {{ form_widget(form.reduct) }}
+
 
             </div>
+        </div>
+            {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary btn-block'}}) }}
 
             {{ form_end(form) }}
 
-        </div>
 
     </div>
 {% endblock %}
 
 {% block javascripts %}
     <script>
-
-        function w3_open_left() {
-            document.getElementById("main").style.marginLeft = "25%";
-            document.getElementById("mySidebarL").style.width = "25%";
-            document.getElementById("mySidebarL").style.display = "block";
-            document.getElementById("openNavLeft").style.display = 'none';
-        }
-
-        function w3_close_left() {
-            document.getElementById("main").style.marginLeft = "0%";
-            document.getElementById("mySidebarL").style.display = "none";
-            document.getElementById("openNavLeft").style.display = "inline-block";
-        }
-
         function w3_open_right() {
-            document.getElementById("main").style.marginRight = "25%";
             document.getElementById("mySidebarR").style.width = "25%";
             document.getElementById("mySidebarR").style.display = "block";
             document.getElementById("openNavRight").style.display = 'none';
         }
 
         function w3_close_right() {
-            document.getElementById("main").style.marginRight = "0%";
             document.getElementById("mySidebarR").style.display = "none";
             document.getElementById("openNavRight").style.display = "inline-block";
         }
 
+        function w3_open_left() {
+            document.getElementById("mySidebarL").style.width = "25%";
+            document.getElementById("mySidebarL").style.display = "block";
+            document.getElementById("openNavLeft").style.display = 'none';
+        }
+
+        function w3_close_left() {
+            document.getElementById("mySidebarL").style.display = "none";
+            document.getElementById("openNavLeft").style.display = "inline-block";
+        }
     </script>
 {% endblock %}

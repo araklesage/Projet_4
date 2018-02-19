@@ -25,7 +25,12 @@ class PriceService
                     break;
             }
         }
-
+       /* if ($glassHalfFull)
+        {
+            $rabbat = $prices / 2 ;
+            $prices = $rabbat ;
+            return $prices;
+        }*/
     }
 
     public function getTotal($ticketsList, array $prices)

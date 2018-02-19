@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>{% block title %}OC Plateforme{% endblock %}</title>
+    <title>{% block title %}Louvre Réservation{% endblock %}</title>
 
     {% block stylesheets %}
         <script
@@ -34,10 +34,7 @@
             <img src="{{ asset('bundles/ocbooking/images/logo-invers.png') }}" id="logo">
         </a>
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <div class="col-lg-8" id="flashbag">
@@ -49,6 +46,11 @@
 
                 {% for flashMessage in app.session.flashbag.get('success') %}
                     <div class="alert alert-success">
+                        {{ flashMessage }}
+                    </div>
+                {% endfor %}
+                {% for flashMessage in app.session.flashbag.get('info') %}
+                    <div class="alert alert-info">
                         {{ flashMessage }}
                     </div>
                 {% endfor %}
@@ -92,11 +94,11 @@
             </button>
         </div>
         <!-- SideBar basket -->
-        {{ render(controller("OCBookingBundle:Booking:panier")) }}
+        {{ render(url('oc_booking_basket')) }}
 
         <!-- SideBar Formulaire Ticket -->
 
-        {{ render(controller("OCBookingBundle:Booking:form")) }}
+        {{ render(url("oc_booking_form")) }}
         <div class="col-lg-10" id="main">
             {% block body %}
             {% endblock %}
@@ -117,6 +119,29 @@
 
 
 {% block javascripts %}
+    <script>
+    function w3_open_right() {
+    document.getElementById("mySidebarR").style.width = "25%";
+    document.getElementById("mySidebarR").style.display = "block";
+    document.getElementById("openNavRight").style.display = 'none';
+    }
+
+    function w3_close_right() {
+    document.getElementById("mySidebarR").style.display = "none";
+    document.getElementById("openNavRight").style.display = "inline-block";
+    }
+
+    function w3_open_left() {
+    document.getElementById("mySidebarL").style.width = "25%";
+    document.getElementById("mySidebarL").style.display = "block";
+    document.getElementById("openNavLeft").style.display = 'none';
+    }
+
+    function w3_close_left() {
+    document.getElementById("mySidebarL").style.display = "none";
+    document.getElementById("openNavLeft").style.display = "inline-block";
+    }
+    </script>
 {% endblock %}
 
 </body>

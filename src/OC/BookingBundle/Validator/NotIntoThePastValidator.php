@@ -3,18 +3,20 @@
 
 namespace OC\BookingBundle\Validator;
 
-use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\ConstraintValidator;
 
 
-class NotIntoThePastValidator extends ConstraintValidator
+
+class NotIntoThePastValidator
 {
-    public function validate($date, Constraint $constraint)
+
+    public function toLate($date)
     {
+
+
         $today= new \DateTime();
 
-        if ($date <= $today){
-            $this->context->addViolation($constraint->message);
+        if ($date < $today){
+           return true;
         }
     }
 }

@@ -3,3 +3,9 @@ services:
         class: OC\BookingBundle\Utils\PriceService
     oc_generator.number:
         class: OC\BookingBundle\Utils\GeneratorNumberService
+    oc_booking.counter :
+        class: OC\BookingBundle\Utils\CountService
+    oc_booking.date:
+        class: OC\BookingBundle\Utils\HolidayService
+    oc_booking.notIntoThePast :
+        class: OC\BookingBundle\Validator\NotIntoThePastValidator

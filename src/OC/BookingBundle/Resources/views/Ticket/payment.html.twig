@@ -1,0 +1,62 @@
+
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+{% endblock %}
+
+
+
+{% block body %}
+    <div class="col-lg-12">
+            <h1>En poursuivant, vous reconnaissez l'achat des produits suivants :</h1>
+            <ul class="list-group">
+
+                {% for ticket in tickets %}
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-xs-1">
+                                le {{ ticket.date|date('d F Y') }}
+                            </div>
+                            <div class="col-xs-3">
+                                 , pour :  {{ ticket.lastName|upper }}
+                            </div>
+                            <div class="col-xs-3">
+                                {{ ticket.firstName }}
+                            </div>
+                            <div class="col-xs-2">
+                                , née le : {{ ticket.birthDate|date('d F Y') }}
+                            </div>
+                            <div class="col-xs-2">
+                                ,  tarif: {{ ticket.price }} €
+                            </div>
+                        </div>
+
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <h2> Pour un total de : {{ total }} €</h2>
+
+            <form action="{{ path('oc_booking_validation') }}" method="POST">
+                <script
+
+                        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                        data-key="pk_test_pX1QSyNF2ZBSNN2cRCQ1fzSw"
+                        data-amount="{{ total*100 }} "
+                        data-email="{{ booking.email }}"
+                        data-name="Louvre Réservation"
+                        data-description="{{ total }} €"
+                        data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                        data-locale="auto"
+                        data-zip-code="false"
+                        data-currency="eur">
+                </script>
+            </form>
+            <p> en cas de doute vous pouvez toujours revenir sur la page précedente
+            <p>
+                <button class="btn btn-secondary">Retour</button>
+
+    </div>
+{% endblock %}

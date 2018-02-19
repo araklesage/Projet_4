@@ -35,7 +35,6 @@ class Ticket
     /**
      * @var \DateTime
      *
-     * @NotIntoThePast()
      *
      * @ORM\Column(name="date",type="datetime")
      *
@@ -85,6 +84,13 @@ class Ticket
      *
      */
     private $lastName;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="glassHalfFull", type="boolean")
+     */
+    private $glassHalfFull;
 
     public function __construct()
     {
@@ -264,5 +270,29 @@ class Ticket
     public function getDate()
     {
         return $this->date;
+    }
+
+    /**
+     * Set glassHalfFull
+     *
+     * @param boolean $glassHalfFull
+     *
+     * @return Ticket
+     */
+    public function setGlassHalfFull($glassHalfFull)
+    {
+        $this->glassHalfFull = $glassHalfFull;
+
+        return $this;
+    }
+
+    /**
+     * Get glassHalfFull
+     *
+     * @return boolean
+     */
+    public function getGlassHalfFull()
+    {
+        return $this->glassHalfFull;
     }
 }

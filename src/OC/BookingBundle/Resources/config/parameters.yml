@@ -4,3 +4,15 @@ parameters:
         senior: 12
         junior: 8
         reduct: 10
+
+    holiday:
+        an: 01-01
+        paques: 04-02
+        travail: 05-01
+        1945: 05-08
+        ascension: 05-10
+        pentecote: 05-21
+        nationale: 08-14
+        assomption: 08-15
+        toussaint: 11-01
+        noel: 12-25

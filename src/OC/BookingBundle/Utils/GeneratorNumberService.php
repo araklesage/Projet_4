@@ -8,6 +8,8 @@ class GeneratorNumberService
         $today = date("Ymd");
         $rand = strtoupper(substr(uniqid(sha1(time())),0,4));
 
-        return $today . $rand;
+        $numberBooking = $today . $rand ;
+
+        return $numberBooking;
     }
 }

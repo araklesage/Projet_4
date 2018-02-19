@@ -1,57 +1,62 @@
 {% extends "OCBookingBundle::Layout.html.twig" %}
 
 
-
 {% block body %}
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-4">
-                <h1>Le Louvre</h1>
-                <h2>Rue de Rivoli,</h2>
-                <h3>75001, PARIS</h3>
-            </div>
-            <div class="" col-lg-8>
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2624.874102365142!2d2.335455316064797!3d48.86061107928765!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e671d877937b0f%3A0xb975fcfa192f84d4!2sMus%C3%A9e+du+Louvre!5e0!3m2!1sfr!2sfr!4v1517247676410"
-                        width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+    <div class="contact-container"
+         style="background-image:url('{{ asset('bundles/ocbooking/images/louvre_int.jpg') }}')">
+
+
+        <div class="container contact">
+            <div class="row">
+                <div class="col-lg-4">
+                    <h1>Le Louvre</h1>
+                    <h2>Rue de Rivoli,</h2>
+                    <h3>75001, PARIS</h3>
+                </div>
+                <div class="" col-lg-8>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2624.874102365142!2d2.335455316064797!3d48.86061107928765!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e671d877937b0f%3A0xb975fcfa192f84d4!2sMus%C3%A9e+du+Louvre!5e0!3m2!1sfr!2sfr!4v1517247676410"
+                            width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="container">
-        <h3>Formulaire de contact</h3>
-
-        <div class="w3-bar-item">
+        <div class="container">
+            <h3>Formulaire de contact</h3>
 
             {{ form_start(form, {'attr': {'class':'form-horizontal'}}) }}
             {{ form_errors(form) }}
 
 
             {# selecteur Prénom #}
+            <div class="row">
 
-            <div class="w3-container">
 
-                {{ form_label(form.firstName, "Prénom") }}
 
-                {{ form_errors(form.firstName) }}
+                <div class="col-lg-6">
 
-                {{ form_widget(form.firstName, {'attr': {'class':'form-control'}}) }}
+                    {{ form_label(form.firstName, "Prénom") }}
 
-            </div>
+                    {{ form_errors(form.firstName) }}
 
-            {# selecteur Nom #}
+                    {{ form_widget(form.firstName, {'attr': {'class':'form-control'}}) }}
 
-            <div class="w3-container">
+                </div>
 
-                {{ form_label(form.lastName, "Nom") }}
+                {# selecteur Nom #}
 
-                {{ form_errors(form.lastName) }}
+                <div class="col-lg-6">
 
-                {{ form_widget(form.lastName, {'attr': {'class':'form-control'}}) }}
+                    {{ form_label(form.lastName, "Nom") }}
 
+                    {{ form_errors(form.lastName) }}
+
+                    {{ form_widget(form.lastName, {'attr': {'class':'form-control'}}) }}
+
+                </div>
             </div>
 
             {# selecteur adresse mail #}
 
-            <div class="w3-container">
+            <div class="col-lg-12">
 
                 {{ form_label(form.mailAdress, "Adresse Email") }}
 
@@ -63,7 +68,7 @@
 
             {# selecteur sujet #}
 
-            <div class="w3-container">
+            <div class="col-lg-12">
 
 
                 {{ form_label(form.subject, "Sujet") }}
@@ -73,7 +78,7 @@
 
             </div>
 
-            <div class="w3-container">
+            <div class="col-lg-12">
 
                 {{ form_label(form.text, "Texte") }}
                 {{ form_widget(form.text) }}
@@ -81,9 +86,9 @@
 
             </div>
 
-            <div class=" w3-container" id="add-ticket">
+            <div class="col-lg-12" id="add-ticket">
 
-                {{ form_widget(form.envoyer, {'attr': {'class': 'w3-button'}}) }}
+                {{ form_widget(form.envoyer, {'attr': {'class': 'btn btn-primary btn-block'}}) }}
 
             </div>
 
@@ -92,4 +97,52 @@
         </div>
 
     </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+
+    <script>
+        function redimensionnement() {
+
+            var $image = $('img.superbg');
+            var image_width = $image.width();
+            var image_height = $image.height();
+
+            var over = image_width / image_height;
+            var under = image_height / image_width;
+
+            var body_width = $(window).width();
+            var body_height = $(window).height();
+
+            if (body_width / body_height >= over) {
+                $image.css({
+                    'width': body_width + 'px',
+                    'height': Math.ceil(under * body_width) + 'px',
+                    'left': '0px',
+                    'top': Math.abs((under * body_width) - body_height) / -2 + 'px'
+                });
+            }
+
+            else {
+                $image.css({
+                    'width': Math.ceil(over * body_height) + 'px',
+                    'height': body_height + 'px',
+                    'top': '0px',
+                    'left': Math.abs((over * body_height) - body_width) / -2 + 'px'
+                });
+            }
+        }
+
+        $(document).ready(function () {
+
+            // Au chargement initial
+            redimensionnement();
+
+            // En cas de redimensionnement de la fenêtre
+            $(window).resize(function () {
+                redimensionnement();
+            });
+
+        });
+
 {% endblock %}

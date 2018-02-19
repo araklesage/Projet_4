@@ -43,14 +43,7 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script type="text/javascript">
-        $(window).scroll(function () {
-            if ($(window).scrollTop() == $(document).height() - $(window).height()) {
-                $('.index').slideUp('slow');
-                $('.hidden').slideDown('slow');
-            }
-        });
-    </script>
+
     <script>
         function redimensionnement() {
 
@@ -95,32 +88,42 @@
 
         });
 
-        function w3_open_left() {
-            document.getElementById("main").style.marginLeft = "25%";
-            document.getElementById("mySidebarL").style.width = "25%";
-            document.getElementById("mySidebarL").style.display = "block";
-            document.getElementById("openNavLeft").style.display = 'none';
-
+        is_processing = false;
+        last_page = false;
+        function addMoreElements() {
+            is_processing = true;
+            $.ajax({
+                type: "GET",
+                //FOS Routing
+                url: Routing.generate('oc_booking_tickets'),
+                success: function() {
+                   if (data.html.length > 0) {
+                        $('.selector').append(data.html);
+                        //The server can answer saying it's the last page so that the browser doesn't make anymore calls
+                        last_page = data.last_page;
+                    } else {
+                        last_page = true;
+                    }
+                    is_processing = false;
+                },
+                error: function(data) {
+                    is_processing = false;
+                }
+            });
         }
 
-        function w3_close_left() {
-            document.getElementById("main").style.marginLeft = "0%";
-            document.getElementById("mySidebarL").style.display = "none";
-            document.getElementById("openNavLeft").style.display = "inline-block";
-        }
+        $(window).scroll(function() {
+            var wintop = $(window).scrollTop(), docheight = $(document).height(), winheight = $(window).height();
+            //Modify this parameter to establish how far down do you want to make the ajax call
+            var scrolltrigger = 0.80;
+            if ((wintop / (docheight - winheight)) > scrolltrigger) {
+                //I added the is_processing variable to keep the ajax asynchronous but avoiding making the same call multiple times
+                if (last_page === false && is_processing === false) {
+                    addMoreElements();
+                }
+            }
+        });
 
-        function w3_open_right() {
-            document.getElementById("main").style.marginRight = "25%";
-            document.getElementById("mySidebarR").style.width = "25%";
-            document.getElementById("mySidebarR").style.display = "block";
-            document.getElementById("openNavRight").style.display = 'none';
 
-        }
-
-        function w3_close_right() {
-            document.getElementById("main").style.marginRight = "0%";
-            document.getElementById("mySidebarR").style.display = "none";
-            document.getElementById("openNavRight").style.display = "inline-block";
-        }
     </script>
 {% endblock %}

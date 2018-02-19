@@ -33,9 +33,9 @@ class Booking
     private $date;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="numberBooking", type="integer")
+     * @ORM\Column(name="numberBooking", type="string")
      */
     private $numberBooking;
 

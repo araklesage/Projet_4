@@ -13,7 +13,10 @@ use OC\BookingBundle\Form\CustomerType;
 use OC\BookingBundle\Form\TicketDeleteType;
 use OC\BookingBundle\Form\TicketType;
 use OC\BookingBundle\Utils\PriceService;
+use Stripe\Charge;
+use Stripe\Stripe;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -48,62 +51,34 @@ class BookingController extends Controller
 
     // Appel Page de confirmation de commande et envoi Email
 
-    public function confirmAction(Request $request)
+    public function validationAction(Request $request)
     {
         $session = $request->getSession();
         $tickets = ($session->get('tickets')) ? $session->get('tickets') : array();
-        $tickets = ($session->get('booking')) ? $session->get('booking') : array();
+        $booking = ($session->get('booking')) ? $session->get('booking') : array();
         $priceService = $this->container->get('oc_booking.prices');
         $total = $priceService->getTotal($tickets, $this->getParameter('prices'));
-
-        if ($request->isMethod('POST') && $bookingform->handleRequest($request)->isValid()) {
-            $session = $request->getSession();
-            $booking = ($session->get('booking')) ? $session->get('booking') : array();
-            $generatorService = $this->container->get('oc_generator.number');
-            $booking->setNumberBooking($generatorService->GenerateAction());
-            $session->set('booking', $booking);
-
-            return $this->redirectToRoute('oc_platform_home');
-        }
-        return $this->render('OCBookingBundle:Ticket:index.html.twig', array(
-            "tickets" => $tickets,
-            "total" => $total,
-            "booking" => $booking,
+        Stripe::setApiKey('sk_test_ujyOAs5oMtAs04rZTLf5RNyj');
+        Charge::create(array(
+            'amount' => $total * 100,
+            'currency' => 'eur',
+            'description' => 'paiement test',
+            'capture' => false,
+            'source' => $request->get('stripeToken'),
         ));
 
-
-        /*  return $this->render('OCBookingBundle:Ticket:test.html.twig', array(
-              "tickets" => $tickets,
-              "total" => $total,
-      ));*/
-
-        /*$session = $request->getSession();
-        $tickets = ($session->get('tickets')) ? $session->get('tickets') : array();
         $em = $this->getDoctrine()->getManager();
-        $booking = ($session->get('booking')) ? $session->get('booking') : array();
         foreach ($tickets as $ticket) {
             $ticket->setBooking($booking);
             $em->persist($ticket);
         }
         $em->persist($booking);
         $em->flush();
+        $session->clear();
 
-        $message = (new \Swift_Message('Validation de réservation'))
-            ->setFrom('estebangrabette@gmail.com')
-            ->setTo('{{booking.email}}')
-            ->setBody(
-                $this->renderView(
-                    'OCBookingBundle:Emails:validation.html.twig',
-                    array()
-                ),
-                'text/html'
-            );
 
-        $this->get('mailer')->send($message);
+        return $this->render('OCBookingBundle:Ticket:validation.html.twig');
 
-        $request->getSession()->getFlashbag()->add('success', 'Commande validée');
-
-        return $this->render('OCBookingBundle:Ticket:confirm.html.twig');*/
     }
 
     // Formulaire d'Ajout Ticket
@@ -111,22 +86,72 @@ class BookingController extends Controller
     public function formAction(Request $request)
     {
         $ticket = new Ticket();
-        $form = $this->get('form.factory')->create(TicketType::class, $ticket);
+        $form = $this->get('form.factory')->create(TicketType::class, $ticket, [
+            'action' => $this->generateUrl('oc_booking_form')
+        ]);
 
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
-            $session = $request->getSession();
-            $tickets = ($session->get('tickets')) ? $session->get('tickets') : array();
-            $ticket->sessionId = uniqid();
-            $tickets[] = $ticket;
-            $session->set('tickets', $tickets);
+            //connexion à la BD et de l'entity ticket
+            $repository = $this
+                ->getDoctrine()
+                ->getManager()
+                ->getRepository('OCBookingBundle:Ticket');
+            $date = $form['date']->getData();
 
-            $request->getSession()->getFlashBag()->add('success', 'Ticket ajouté');
+            // Récupération des tickets en fonction de la date du ticket à valider
 
-            return $this->render('OCBookingBundle:Ticket:form.html.twig', array(
-                "form" => $form->createView(),
-                "tickets" => $tickets,
-            ));
+            $listTickets = $repository->findByDate($date);
+
+            $notIntoThePastValidator = $this->container->get('oc_booking.notIntoThePast');
+
+            $notIntoThePast = $notIntoThePastValidator->toLate($date);
+
+            // récupération du service
+            $holidayService = $this->container->get('oc_booking.date');
+
+            $holiday = $holidayService->dateValidator($date, $this->getParameter('holiday'));
+            if (!$notIntoThePast) {
+
+                // si jour non ferié : validation de la suite du formulaire.
+                if (!$holiday) {
+
+                    $countService = $this->container->get('oc_booking.counter');
+
+                    // envois de la liste de tickets de la BD au service de comptage
+
+                    $go = $countService->ToMuchTicket($listTickets);
+
+                    // activation de l'enregistrement en session si le signal est possitif
+
+                    if ($go) {
+                        $session = $request->getSession();
+                        $tickets = ($session->get('tickets')) ? $session->get('tickets') : array();
+                        $ticket->sessionId = uniqid();
+                        $tickets[] = $ticket;
+                        $session->set('tickets', $tickets);
+
+                        $request->getSession()->getFlashBag()->add('success', 'Ticket ajouté');
+
+                        return $this->redirectToRoute('oc_booking_homepage');
+                    } // non enregistrement en session si le signal est négatif
+                    else {
+                        $request->getSession()->getFlashBag()->add('info', "Le nombre d'entrée disponible ce jour est atteint merci de sélectionné une autre date");
+
+                        return $this->redirectToRoute('oc_booking_homepage');
+                    }
+                } //si jour ferié affichage d'une balise et retour sur l'index
+                else {
+                    $request->getSession()->getFlashBag()->add('info', 'Vous ne pouvez pas réserver de ticket pour ce jour : ' . $date->format('d-m-Y') . ' est un jour ferié');
+
+                    return $this->redirectToRoute('oc_booking_homepage');
+                }
+            }
+            else{
+                $request->getSession()->getFlashBag()->add('fail', 'Vous ne pouvez réserver pour un jour passé');
+                return $this->redirectToRoute('oc_booking_homepage');
+            }
         }
+
         return $this->render('OCBookingBundle:Ticket:form.html.twig', array(
             "form" => $form->createView(),
         ));
@@ -159,7 +184,7 @@ class BookingController extends Controller
 
             $request->getSession()->getFlashBag()->add('notice', 'Annonce bien enregistrée.');
 
-            return $this->redirectToRoute('oc_platform_home');
+            return $this->redirectToRoute('oc_booking_homepage');
         }
 
         return $this->render('OCBookingBundle:Contact:contact.html.twig', array(
@@ -168,49 +193,33 @@ class BookingController extends Controller
 
     }
 
-    // Validation Panier et appel bouton de paiement Stripe ( à travailler)
+    // Confirmation Panier et appel bouton de paiement Stripe
 
-    public function validationAction(Request $request)
+    public function confirmAction(Request $request)
     {
-
-        $booking = new booking;
         $session = $request->getSession();
+        $booking = ($session->get('booking')) ? $session->get('booking') : new booking;
         $tickets = ($session->get('tickets')) ? $session->get('tickets') : array();
-        if (count($tickets) == 0) {
-            $request->getSession()->getFlashBag()->add('fail', 'Votre panier est vide');
+        $priceService = $this->container->get('oc_booking.prices');
+        $total = $priceService->getTotal($tickets, $this->getParameter('prices'));
 
-            return $this->redirectToRoute('oc_booking_homepage');
-        } else if ($request->isMethod('POST') && $bookingform->handleRequest($request)->isValid()) {
-            $generatorService = $this->container->get('oc_generator.number');
-            $booking = ($session->get('booking'));
-            $booking->setNumberBooking($generatorService->GenerateAction());
-            $booking->sessionId = uniqid();
-            $session->set("booking", $booking);
-            $em = $this->getDoctrine()->getManager();
-
-
-            $session->set('tickets', $tickets);
-            foreach ($tickets as $ticket) {
-                $ticket->setBooking($booking);
-                $em->persist($ticket);
-            }
-            $em->persist($booking);
-            $em->flush();
-            $customer = new Customer();
-
-
-            return $this->redirectToRoute('oc_booking_homepage');
-        }
+        return $this->render('OCBookingBundle:Ticket:payment.html.twig', array(
+            "tickets" => $tickets,
+            "total" => $total,
+            "booking" => $booking,
+        ));
     }
 
     // Gestionnaire de l'affichage de la liste de ticket du Panier
 
-    public function panierAction(Request $request)
+    public function basketAction(Request $request)
     {
         $booking = new booking;
         $session = $request->getSession();
         $tickets = $session->get('tickets');
-        $bookingform = $this->get('form.factory')->create(BookingType::class, $booking);
+        $bookingform = $this->get('form.factory')->create(BookingType::class, $booking, [
+            'action' => $this->generateUrl('oc_booking_basket')
+        ]);
         $priceService = $this->container->get('oc_booking.prices');
 
         if (count($tickets) > 0) {
@@ -223,31 +232,21 @@ class BookingController extends Controller
 
         $total = $priceService->getTotal($tickets, $this->getParameter('prices'));
 
-        /* if ($request->isMethod('POST') && $form->handleRequest($request)->isValid())
-         {
-             $session = $request->getSession();
-             $tickets = ($session->get('tickets')) ? $session->get('tickets') : array();
-             $ticket->sessionId = uniqid();
-             $tickets[] = $ticket;
-             $session->set('tickets', $tickets);
-
-             $request->getSession()->getFlashBag()->add('success', 'Ticket ajouté');
-
-             return $this->render('OCBookingBundle:Ticket:form.html.twig', array(
-                 "form" => $form->createView(),
-                 "tickets" => $tickets,
-             ));
-         }
-         return $this->render('OCBookingBundle:Ticket:form.html.twig', array(
-             "form" => $form->createView(),
-         ));*/
-
         if ($request->isMethod('POST') && $bookingform->handleRequest($request)->isValid()) {
+            if (count($tickets) == 0) {
+                $request->getSession()->getFlashBag()->add('fail', 'Votre panier est vide');
+
+                return $this->redirectToRoute('oc_booking_homepage');
+            }
             $session = $request->getSession();
-            $booking = ($session->get('booking')) ? $session->get('booking') : array();
             $generatorService = $this->container->get('oc_generator.number');
-            $booking->setNumberBooking($generatorService->GenerateAction());
+
+            $numberbooking = $generatorService->generateAction();
+
+            $booking->setNumberBooking($numberbooking);
             $session->set('booking', $booking);
+
+            return $this->redirectToRoute('oc_booking_confirm');
 
         }
         return $this->render('OCBookingBundle:Ticket:basket.html.twig', array(
@@ -258,12 +257,13 @@ class BookingController extends Controller
 
     }
 
+
     // Action de suppresion de ticket.
 
     public function deleteAction(Request $request, $sessionId)
     {
         $session = $request->getSession();
-        $tickets = $session->get('tickets');;
+        $tickets = $session->get('tickets');
         foreach ($tickets as $key => $ticket) {
             if ($ticket->sessionId == $sessionId) {
                 unset($tickets[$key]);
@@ -273,16 +273,19 @@ class BookingController extends Controller
         $session->set('tickets', $tickets);
         return $this->redirectToRoute('oc_booking_homepage');
     }
-}
-/*  public function cardAction()
-  {
-      $priceService = $this->container->get('oc_booking.prices');
-      $total = $priceService->getTotal($tickets, $this->getParameter('prices'));
 
-      return $this->render('OCBookingBundle:Ticket:card.html.twig', array(
-          'total' => $total,
-          'card' => $card->createView(),
-      ));
-  }
-*/
+    public function paymentAction(Request $request)
+    {
+        $session = $request->getSession();
+        $tickets = $session->get('tickets');
+        $priceService = $this->container->get('oc_booking.prices');
+        $total = $priceService->getTotal($tickets, $this->getParameter('prices'));
+
+        return $this->render('OCBookingBundle:Ticket:payment.html.twig', array(
+            'total' => $total,
+            'tickets' => $tickets,
+
+        ));
+    }
+}
 

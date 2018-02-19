@@ -5,6 +5,7 @@ namespace OC\BookingBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -20,6 +21,7 @@ class TicketType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->setAction($options['action'])
             ->add('date',       DateType::class, array(
                 'widget' => 'choice',
                 'format' => 'dd MM yyyy'
@@ -31,6 +33,12 @@ class TicketType extends AbstractType
                 'format' => 'dd MM yyyy'
             ))
             ->add('country',    CountryType::class)
+            ->add('glassHalfFull',  ChoiceType::class, array(
+                'choices' => array (
+                    'Journée' => '0',
+                    'Demi-journée' => '1',
+                )
+            ))
             ->add('reduct',     CheckboxType::class, array(
                 'required' => false
             ))
@@ -43,7 +51,8 @@ class TicketType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'OC\BookingBundle\Entity\Ticket'
+            'data_class' => 'OC\BookingBundle\Entity\Ticket',
+            'action' => null,
         ));
     }
 
