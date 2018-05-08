@@ -1,19 +1,118 @@
-#header {
-    background-color: #0000F0;
-    position: fixed; /* Le fond est fixé en haut de la page */
-    width: 100%; /* Il occupe toute la largeur de l'écran */
-    height: 300px; /* On met ici la même hauteur que le jumbotron */
-    top:0;
-    left:0;
-    z-index: -1;
+#body {
+
+    background-image: url("../images/Louvre.jpg");
+    background-position-x : center;
+    background-color: #222222;
+
+
 }
-#menu {
-    background-color: #5eb5e0;
+#mySidebarL, #mySidebarR, #ticket-container section{
+    position: relative;
 }
-.jumbotron {
-    margin-bottom: 0px;
-    height: 300px;
-    color: white; /* Le texte sera affiché en blanc */
-    text-shadow: black 0.3em 0.3em 0.3em;
-    background:transparent;
+.w3-footer{
+    background-color: #4F57AA;
+}
+#card-button, .w3-button{
+    color: #BEE2E7;
+}
+#add-ticket, .w3-footer, #card-button  {
+    width : 100%;
+    position : absolute;
+    bottom: 0px;
+}
+.w3_open_left{
+
+}
+
+
+#mySidebarL, #mySidebarR, #ticket-container section, #main-header, .confirm-container {
+
+    background: -moz-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(219,219,219,1) 100%);
+    background: -webkit-gradient(left top, right top, color-stop(0%, rgba(255,255,255,1)), color-stop(47%, rgba(246,246,246,1)), color-stop(100%, rgba(219,219,219,1)));
+    background: -webkit-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(219,219,219,1) 100%);
+    background: -o-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(219,219,219,1) 100%);
+    background: -ms-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(219,219,219,1) 100%);
+    background: linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(219,219,219,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#dbdbdb', GradientType=1 );
+    -webkit-box-shadow: 10px 10px 33px -5px rgba(0,0,0,0.63);
+    -moz-box-shadow: 10px 10px 33px -5px rgba(0,0,0,0.63);
+    box-shadow: 10px 10px 33px -5px rgba(0,0,0,0.63);
+}
+.w3-header{
+    padding : 5px
+}
+#ticket-container section {
+    height:400px;
+    text-align: center;
+}
+.col-lg-6{
+    background-color: #C9C9C9;
+}
+#openNavLeft{
+    position: fixed;
+    left:0px;
+    margin-right: 0px;
+    -webkit-box-shadow: 10px 10px 35px -4px rgba(0,0,0,0.63);
+    -moz-box-shadow: 10px 10px 35px -4px rgba(0,0,0,0.63);
+    box-shadow: 10px 10px 35px -4px rgba(0,0,0,0.63);
+
+}
+#openNavRight{
+    position: fixed;
+    right: 0px;
+    -webkit-box-shadow: -10px 10px 35px -4px rgba(0,0,0,0.63);
+    -moz-box-shadow: -10px 10px 35px -4px rgba(0,0,0,0.63);
+    box-shadow: -10px 10px 35px -4px rgba(0,0,0,0.63);
+}
+.w3-animate-left{
+    position:fixed;
+    right:0px;
+
+}
+footer p{
+    color: white;
+    text-align: center;
+    position: relative;
+    vertical-align: center;
+
+}
+footer col-md-11,footer p{
+    height: 100%;
+
+}
+footer{
+    height: 52px;
+    position : absolute;
+    bottom : 0;
+    width: 100%;
+
+}
+#ticket-Vinci{
+
+}
+#DeVinci{
+    height:400px;
+    width: 279px;
+}
+#mySidebarL, #mySidebarR{
+    height: auto;
+    max-height: 50%;
+    overflow: auto;
+}
+#contact-button{
+    position : absolute;
+    right : 0;
+    background: linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(219,219,219,1) 100%);
+    -webkit-box-shadow: -10px -10px 35px -4px rgba(0,0,0,0.63);
+    -moz-box-shadow: -10px -10px 35px -4px rgba(0,0,0,0.63);
+    box-shadow: -10px -10px 35px -4px rgba(0,0,0,0.63);
+}
+
+@media screen and (max-width: 1440px) {
+    .footer {
+        position: fixed;
+        bottom :0;
+
+
+    }
 }

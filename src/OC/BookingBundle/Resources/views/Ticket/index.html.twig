@@ -1,16 +1,126 @@
 {# src/OC/BookingBundle/Resources/views/Ticket/index.html.twig #}
 
-{% extends "OCBookingBundle::layout.html.twig" %}
+{% extends "OCBookingBundle::Layout.html.twig" %}
 
 {% block title %}
     Accueil - {{ parent() }}
 {% endblock %}
 
+ {% block stylesheets %}
+     <script
+             src="https://code.jquery.com/jquery-3.3.1.js"
+             integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+             crossorigin="anonymous"></script>
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+           crossorigin="anonymous">
+     <meta name="viewport" content="width=device-width, initial-scale=1">
+     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+             integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+             crossorigin="anonymous"></script>
+     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+             crossorigin="anonymous"></script>
+     <meta charset="UTF-8">
+     <title>Fond extensible - version JQUERY</title>
+     <link rel="stylesheet" href="{{ asset('bundles/ocbooking/css/background.css') }}" type="text/css" media="screen">
+     <link rel="stylesheet" href="{{ asset('bundles/ocbooking/css/style.css') }}">
+ {% endblock %}
+
 {% block body %}
+    <div class="index">
+        <img src="{{ asset('bundles/ocbooking/images/Musée-du-louvre.jpg') }}" class="superbg">
+        <div id="header">
 
-<h2>Liste des tickets</h2>
+            <h1>Billeterie</h1>
+        </div>
+    </div>
 
-<div class="container">
+    <div class="col-lg-10 hidden" id="tickets-page">
+        {{ render(controller("OCBookingBundle:Booking:tickets")) }}
+    </div>
+{% endblock %}
 
-</div>
+{% block javascripts %}
+    <script type="text/javascript">
+        $(window).scroll(function () {
+            if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+                $('.index').slideUp('slow');
+                $('.hidden').slideDown('slow');
+            }
+        });
+    </script>
+    <script>
+        function redimensionnement() {
+
+            var $image = $('img.superbg');
+            var image_width = $image.width();
+            var image_height = $image.height();
+
+            var over = image_width / image_height;
+            var under = image_height / image_width;
+
+            var body_width = $(window).width();
+            var body_height = $(window).height();
+
+            if (body_width / body_height >= over) {
+                $image.css({
+                    'width': body_width + 'px',
+                    'height': Math.ceil(under * body_width) + 'px',
+                    'left': '0px',
+                    'top': Math.abs((under * body_width) - body_height) / -2 + 'px'
+                });
+            }
+
+            else {
+                $image.css({
+                    'width': Math.ceil(over * body_height) + 'px',
+                    'height': body_height + 'px',
+                    'top': '0px',
+                    'left': Math.abs((over * body_height) - body_width) / -2 + 'px'
+                });
+            }
+        }
+
+        $(document).ready(function () {
+
+            // Au chargement initial
+            redimensionnement();
+
+            // En cas de redimensionnement de la fenêtre
+            $(window).resize(function () {
+                redimensionnement();
+            });
+
+        });
+
+        function w3_open_left() {
+            document.getElementById("main").style.marginLeft = "25%";
+            document.getElementById("mySidebarL").style.width = "25%";
+            document.getElementById("mySidebarL").style.display = "block";
+            document.getElementById("openNavLeft").style.display = 'none';
+
+        }
+
+        function w3_close_left() {
+            document.getElementById("main").style.marginLeft = "0%";
+            document.getElementById("mySidebarL").style.display = "none";
+            document.getElementById("openNavLeft").style.display = "inline-block";
+        }
+
+        function w3_open_right() {
+            document.getElementById("main").style.marginRight = "25%";
+            document.getElementById("mySidebarR").style.width = "25%";
+            document.getElementById("mySidebarR").style.display = "block";
+            document.getElementById("openNavRight").style.display = 'none';
+
+        }
+
+        function w3_close_right() {
+            document.getElementById("main").style.marginRight = "0%";
+            document.getElementById("mySidebarR").style.display = "none";
+            document.getElementById("openNavRight").style.display = "inline-block";
+        }
+    </script>
 {% endblock %}

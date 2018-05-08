@@ -3,6 +3,8 @@
 namespace OC\BookingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints AS Assert;
+
 
 /**
  * Booking
@@ -12,15 +14,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Booking
 {
-    /**
-     * @ORM\OneToOne(targetEntity="OC\BookingBundle\Entity\Customer", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $customer;
-
-    /**
-     * @ORM\
-     */
 
 
     /**
@@ -47,11 +40,12 @@ class Booking
     private $numberBooking;
 
     /**
-     * @var array
+     * @var string
      *
-     * @ORM\Column(name="ticketsList", type="array")
+     * @ORM\Column(name="email", type="string")
+     * @Assert\Email
      */
-    private $ticketsList;
+    private $email;
 
 
     public function __construct()
@@ -119,52 +113,26 @@ class Booking
     }
 
     /**
-     * Set rabatt
+     * Set email
      *
-     * @param boolean $rabatt
+     * @param string $email
      *
      * @return Booking
      */
-
-    public function setTicketsList($ticketsList)
+    public function setEmail($email)
     {
-        $this->ticketsList = $ticketsList;
+        $this->email = $email;
 
         return $this;
     }
 
     /**
-     * Get ticketsList
+     * Get email
      *
-     * @return array
+     * @return string
      */
-    public function getTicketsList()
+    public function getEmail()
     {
-        return $this->ticketsList;
-    }
-
-
-    /**
-     * Set customer
-     *
-     * @param \OC\BookingBundle\Entity\Customer $customer
-     *
-     * @return Booking
-     */
-    public function setCustomer(\OC\BookingBundle\Entity\Customer $customer = null)
-    {
-        $this->customer = $customer;
-
-        return $this;
-    }
-
-    /**
-     * Get customer
-     *
-     * @return \OC\BookingBundle\Entity\Customer
-     */
-    public function getCustomer()
-    {
-        return $this->customer;
+        return $this->email;
     }
 }

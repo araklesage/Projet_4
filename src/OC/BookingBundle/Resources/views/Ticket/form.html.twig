@@ -1,85 +1,146 @@
-<!--<h3>Informations</h3>
+{# src/OC/BookingBundle/Resources/views/Ticket/form.html.twig #}
+<head>
+    {% block stylesheets %}
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    {% endblock %}
+</head>
 
-<div class="well">
-    <div class="container-fluid">
-        <label class=""> Identité</label>
-        <div class="form-inline">
-            <input type="text" class="form-control col-6" id="formName" placeholder="Nom">
-            <input type="text" class="form-control" id="formFirstName" placeholder="Prénom">
+{% block body %}
+    <div class="w3-sidebar w3-bar-block w3-card w3-animate-right" style="display:none;right:0" id="mySidebarR">
+
+        <button class="btn btn-secondary btn-block" onclick="w3_close_right()">
+           <span >Fermer  </span><span class="glyphicon glyphicon-chevron-right"></span>
+        </button>
+
+        <div class="col-lg-12">
+
+            <div class="col-xs-12">
+
+                <h3>
+                    Ajoutez un ticket
+                </h3>
+
+            </div>
+
         </div>
+
+        <div class="col-lg-12">
+
+            {{ form_start(form, {'attr': {'class':'form-horizontal'}}) }}
+            {{ form_errors(form) }}
+
+            {# selecteur Date #}
+
+            <div class="col-lg-12">
+
+                {{ form_label(form.date, "Date") }}
+
+                {{ form_errors(form.date) }}
+
+                {{ form_widget(form.date) }}
+
+            </div>
+
+            {# selecteur Prénom #}
+
+            <div class="col-lg-12">
+
+                {{ form_label(form.firstName, "Prénom", {'label_attr': {'class': ''}}) }}
+
+                {{ form_errors(form.firstName) }}
+
+                {{ form_widget(form.firstName, {'attr': {'class':'form-control'}}) }}
+
+            </div>
+
+            {# selecteur Nom #}
+
+            <div class="col-lg-12">
+
+                {{ form_label(form.lastName, "Nom", {'label_attr': {'class': 'col-sm-2 controle-label'}}) }}
+
+                {{ form_errors(form.lastName) }}
+
+                {{ form_widget(form.lastName, {'attr': {'class':'form-control'}}) }}
+
+            </div>
+
+            {# selecteur Ville #}
+
+            <div class="col-lg-12">
+
+                {{ form_label(form.country, "Ville", {'label_attr': {'class': 'col-sm-2 controle-label'}}) }}
+
+                {{ form_errors(form.country) }}
+
+                {{ form_widget(form.country, {'attr': {'class':'form-control'}}) }}
+
+            </div>
+
+            {# selecteur BirthDate #}
+
+            <div class="col-lg-12">
+
+
+                {{ form_label(form.birthDate, "Date de naissance") }}
+                {{ form_errors(form.birthDate) }}
+
+                {{ form_widget(form.birthDate) }}
+
+            </div>
+
+            {# selecteur Rabbat A REVOIR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!#}
+
+            <div class="col-lg-12">
+
+
+                {{ form_rest (form) }}
+
+
+            </div>
+
+            <div class="col-lg-12" id="add-ticket">
+
+                {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
+
+            </div>
+
+            {{ form_end(form) }}
+
+        </div>
+
     </div>
-<select class="btn-default" name="choix">
-    <option value="choix1">France</option>
-    <option value="choix2">Espagne</option>
-    <option value="choix3">Italie</option>
-    <option value="choix4">Allemagne</option>
-    <option value="choix5">Royaume-Uni</option>
-    <option value="choix6">Canada</option>
-    <option value="choix7">Etats-Unis</option>
-    <option value="choix8">Chine</option>
-    <option value="choix9">Japon</option>
-    <option value="choix10">Pays-Bas</option>
-    <option value="choix11">Irlande</option>
-    <option value="choix12">Portugal</option>
-</select>
-        <div class="from-group">
-            <label class=""> Numéro Carte bleue</label>
-            <input type="text" class="form-control" id="cardId">
-            <label class=""> Date d'expiration</label>
-            <input type="date" class="form-control" id="cardDate">
-            <label class=""> CVV</label>
-            <input type="text" class="form-control xs" id="cardCvv">
+{% endblock %}
 
-            <input type="submit" class="btn-primary" id="validation">
+{% block javascripts %}
+    <script>
 
-        </div>
+        function w3_open_left() {
+            document.getElementById("main").style.marginLeft = "25%";
+            document.getElementById("mySidebarL").style.width = "25%";
+            document.getElementById("mySidebarL").style.display = "block";
+            document.getElementById("openNavLeft").style.display = 'none';
+        }
 
+        function w3_close_left() {
+            document.getElementById("main").style.marginLeft = "0%";
+            document.getElementById("mySidebarL").style.display = "none";
+            document.getElementById("openNavLeft").style.display = "inline-block";
+        }
 
+        function w3_open_right() {
+            document.getElementById("main").style.marginRight = "25%";
+            document.getElementById("mySidebarR").style.width = "25%";
+            document.getElementById("mySidebarR").style.display = "block";
+            document.getElementById("openNavRight").style.display = 'none';
+        }
 
+        function w3_close_right() {
+            document.getElementById("main").style.marginRight = "0%";
+            document.getElementById("mySidebarR").style.display = "none";
+            document.getElementById("openNavRight").style.display = "inline-block";
+        }
 
-</div> -->
-
-<div class="well">
-    {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
-
-    {# Les erreurs générales du formulaire. #}
-    {{ form_errors(form) }}
-
-    {# Génération du label + error + widget pour un champ. #}
-    {% if form.date is defined %}
-        {{ form_row(form.date) }}
-    {% endif %}
-
-    {# Génération manuelle et éclatée : #}
-    <div class="form-group">
-        {# Génération du label. #}
-        {{ form_label(form.title, "Titre de l'annonce", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-
-        {# Affichage des erreurs pour ce champ précis. #}
-        {{ form_errors(form.title) }}
-
-        <div class="col-sm-10">
-            {# Génération de l'input. #}
-            {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
-        </div>
-    </div>
-
-    {# Idem pour un autre champ. #}
-
-
-    {{ form_row(form.firstName) }}
-
-
-
-
-    {# Génération automatique des champs pas encore écrits.
-       Dans cet exemple, ce serait le champ CSRF (géré automatiquement par Symfony !)
-       et tous les champs cachés (type « hidden »). #}
-    {{ form_rest(form) }}
-
-    {# Fermeture de la balise <form> du formulaire HTML #}
-    {{ form_end(form) }}
-</div>
-
-
-</div>
+    </script>
+{% endblock %}

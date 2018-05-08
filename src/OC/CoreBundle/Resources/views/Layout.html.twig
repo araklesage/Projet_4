@@ -3,60 +3,120 @@
 <!DOCTYPE html>
 <html>
 <head>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>{% block title %}OC Plateforme{% endblock %}</title>
 
     {% block stylesheets %}
+        <script
+            src="https://code.jquery.com/jquery-3.3.1.js"
+            integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+            crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+              integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+              crossorigin="anonymous">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-        <link rel="stylesheet" href="../../../BookingBundle/Resources/public/css/Base.css">
-        <link rel="stylesheet" href="{{ asset('bundles/occore/css/style.css') }}">
-
+        <link rel="stylesheet" href="{{ asset('bundles/ocbooking/css/style.css') }}">
+        <link rel="stylesheet" href="{{ asset('bundles/ocbooking/css/infinitescrolling.css') }}">
     {% endblock %}
+
 </head>
 
-<body>
-<div class="container-fluid">
-    <!-- Banner -->
-    <div id="header" class="jumbotron banner">
-        <div class="container">
-        <h1>Plateforme de Réservation du Louvre</h1>
-        <p>
-            Ce projet est propulsé par Symfony, et construit grâce au MOOC OpenClassrooms et SensioLabs.
-        </p>
+<body id="body">
+<div class="scroll">
+    <nav class="navbar navbar-expand-lg navbar-fixed-top" id="fixed-navbar">
+
+        <a class="navbar-brand" href="https://www.louvre.fr/" id="logo-container">
+            <img src="{{ asset('bundles/ocbooking/images/logo-invers.png') }}" id="logo">
+        </a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="col-lg-8" id="flashbag">
+                {% for flashMessage in app.session.flashbag.get('fail') %}
+                    <div class="alert alert-warning">
+                        {{ flashMessage }}
+                    </div>
+                {% endfor %}
+
+                {% for flashMessage in app.session.flashbag.get('success') %}
+                    <div class="alert alert-success">
+                        {{ flashMessage }}
+                    </div>
+                {% endfor %}
+            </div>
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ path ('oc_booking_homepage') }}">Accueil <span
+                                class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('oc_booking_tickets') }}">Tickets</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('oc_booking_contact') }}">Contact</a>
+                </li>
+
+            </ul>
         </div>
+    </nav>
 
-    </div>
+    {#<div class="fluid-container" id="flashbag-container">
 
+        {% for flashMessage in app.session.flashbag.get('fail') %}
+            <div class="alert alert-warning">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
+
+        {% for flashMessage in app.session.flashbag.get('success') %}
+            <div class="alert alert-success">
+                {{ flashMessage }}
+            </div>
+
+        {% endfor %}
+    </div> <!-- End div flashbag -->#}
     <div class="row">
-        <div id="menu" class="navbar-nav">
-            <a class="navbar-brand">Votre sélection</a>
-
-
+        <!-- Bouton Gauche -->
+        <div class="col-lg-1" id="leftButton">
+            <button id="openNavLeft" class="btn btn-lg" onclick="w3_open_left()" title="Panier">
+                <span class="glyphicon glyphicon-shopping-cart"></span>
+            </button>
         </div>
-        <div id="content" class="col-md-9">
+        <!-- SideBar basket -->
+        {{ render(controller("OCBookingBundle:Booking:panier")) }}
 
+        <!-- SideBar Formulaire Ticket -->
 
+        {{ render(url("oc_booking_form")) }}
+        <div class="col-lg-10" id="main">
             {% block body %}
-
             {% endblock %}
 
+        </div> <!-- End main -->
+
+
+        <!-- Bouton droit -->
+        <div class="col-lg-1" id="rightButton">
+            <button id="openNavRight" class="btn btn-lg" onclick="w3_open_right()"
+                    title="Ajoutez un ticket">
+                <span class="glyphicon glyphicon-plus"></span>
+            </button>
         </div>
     </div>
-
-    <hr>
-
-    <footer>
-        <p>Arak's Dreams © {{ 'now'|date('Y') }}</p>
-    </footer>
+    <div class="loader hidden"></div>
 </div>
 
+
 {% block javascripts %}
-    {# Ajoutez ces lignes JavaScript si vous comptez vous servir des fonctionnalités du bootstrap Twitter #}
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 {% endblock %}
 
 </body>

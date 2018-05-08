@@ -1,0 +1,85 @@
+{# src/OCBookingBundle/Ressources/views/Booking/basket.html.twig
+#}
+
+<!-- Sidebar Header -->
+<div class="w3-sidebar w3-bar-block w3-card w3-animate-left" style="display:none;left:0" id="mySidebarL">
+        <button class="btn btn-secondary btn-block" onclick="w3_close_left()">
+            <span class="glyphicon glyphicon-chevron-left">  Fermer</span>
+    </button>
+
+            <!-- Sidebar Header -->
+            <div class="w3-bar-item w3-header">
+                <div class="row">
+                    <div class="col-xs-8">
+                        <h3>Votre Réservation</h3>
+                    </div>
+                    <div class="col-xs-4">
+                        <h2 class="w3-round-small w3-green w3-center">{{  total }} €</h2>
+                    </div>
+                </div>
+
+            </div>
+
+    <!-- Sidebar Tickets -->
+
+            <ul class="w3-bar-item">
+
+                {% for ticket in tickets %}
+                    <li>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                {{ ticket.date|date('d F Y') }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ ticket.lastName|upper}}
+                            </div>
+                            <div class="col-xs-1">
+                                {{ ticket.price }}
+                            </div>
+                            <div class="col-xs-1">
+                                 <span class="glyphicon glyphicon-euro"></span>
+                            </div>
+                            <div class="col-xs-2">
+                                <a class="w3-button w3-tiny w3-red" href="{{ path('oc_booking_delete', { 'sessionId' : ticket.sessionId }) }}"><i class="glyphicon glyphicon-trash"></i></a>
+                            </div>
+                        </div>
+
+                    </li>
+                {% endfor %}
+            </ul>
+    {{ form_start(booking, {'attr': {'class':'form-horizontal'}}) }}
+    {{ form_errors(booking) }}
+
+    {{ form_label(booking.email, "Adresse Email") }}
+    {{ form_errors(booking.email) }}
+    {{ form_widget(booking.email) }}
+
+    {{ form_end(booking) }}
+
+    <button class="btn btn-primary btn-block super-button" id="action" href="{{ path('oc_booking_confirm')}}"  {#onclick="window.open('{{ path('oc_booking_confirm')}}','wclose','width=700,height=600,toolbar=no,status=no,left=20,top=30')"#}>
+            Valider le panier
+    </button>
+
+</div>
+
+<script>
+$(document).ready(function()
+{
+   $('.super-button').click(function()
+   {
+      $.ajax(
+          {
+         type:"POST",
+         url:"{{ path('oc_booking_validation') }}",
+          success: function(data)
+          {
+              $('.super-button').hide();
+              $('.stripe-button').show();
+
+          }
+          });
+      });
+});
+</script>
+
+

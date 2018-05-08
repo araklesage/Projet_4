@@ -6,13 +6,38 @@ oc_booking_homepage:
     requirements:
         page: \d*
 
-oc_booking_view:
-    path:      /booking/ticket/{id}
+oc_booking_tickets:
+    path:      /booking/tickets
     defaults:
-        _controller: OCBookingBundle:Ticket:view
+        _controller: OCBookingBundle:Booking:tickets
     requirements:
         id: \d+
 oc_mail:
-    path:     /test
+    path:     /mail
     defaults:
         _controller: OCBookingBundle:Booking:mail
+
+oc_booking_validation:
+    path:     /validation
+    defaults:
+        _controller: OCBookingBundle:Booking:validation
+
+oc_booking_contact:
+    path:     /contact
+    defaults:
+        _controller: OCBookingBundle:Booking:contact
+
+oc_booking_delete:
+    path:     /delete/{sessionId}
+    defaults:
+        _controller: OCBookingBundle:Booking:delete
+
+oc_booking_confirm:
+    path:   /confirm
+    defaults:
+        _controller: OCBookingBundle:Booking:confirm
+
+oc_booking_form:
+    path:   /booking_form
+    defaults:
+        _controller: OCBookingBundle:Booking:form

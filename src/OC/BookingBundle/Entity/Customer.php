@@ -2,6 +2,8 @@
 
 namespace OC\BookingBundle\Entity;
 
+use Symfony\Component\Validator\Constraint as Assert;
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -33,6 +35,9 @@ class Customer
     /**
      * @var int
      *
+     *
+     *
+     *
      * @ORM\Column(name="cardNumber", type="integer")
      */
     private $cardNumber;
@@ -40,17 +45,25 @@ class Customer
     /**
      * @var int
      *
-     * @ORM\Column(name="cvv", type="integer")
+     * @ORM\Column(name="cvc", type="integer")
      */
-    private $cvv;
+    private $cvc;
 
     /**
-     * @var \DateTime
+     * @var int
      *
-     * @ORM\Column(name="expirationDate", type="datetime")
+     *
+     *
+     * @ORM\Column(name="expirationDateMonth", type="integer")
      */
-    private $expirationDate;
+    private $expirationDateMonth;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="expirationDateYear", type="integer")
+     */
+    private $expirationDateYear;
 
     /**
      * Get id
@@ -89,51 +102,27 @@ class Customer
     }
 
     /**
-     * Set cvv
+     * Set cvc
      *
-     * @param integer $cvv
+     * @param integer $cvc
      *
      * @return Customer
      */
-    public function setCvv($cvv)
+    public function setCvc($cvc)
     {
-        $this->cvv = $cvv;
+        $this->cvc = $cvc;
 
         return $this;
     }
 
     /**
-     * Get cvv
+     * Get cvc
      *
      * @return int
      */
-    public function getCvv()
+    public function getCvc()
     {
-        return $this->cvv;
-    }
-
-    /**
-     * Set expirationDate
-     *
-     * @param \DateTime $expirationDate
-     *
-     * @return Customer
-     */
-    public function setExpirationDate($expirationDate)
-    {
-        $this->expirationDate = $expirationDate;
-
-        return $this;
-    }
-
-    /**
-     * Get expirationDate
-     *
-     * @return \DateTime
-     */
-    public function getExpirationDate()
-    {
-        return $this->expirationDate;
+        return $this->cvc;
     }
 
     /**
@@ -158,5 +147,53 @@ class Customer
     public function getCardName()
     {
         return $this->cardName;
+    }
+
+    /**
+     * Set expirationDateMonth
+     *
+     * @param integer $expirationDateMonth
+     *
+     * @return Customer
+     */
+    public function setExpirationDateMonth($expirationDateMonth)
+    {
+        $this->expirationDateMonth = $expirationDateMonth;
+
+        return $this;
+    }
+
+    /**
+     * Get expirationDateMonth
+     *
+     * @return integer
+     */
+    public function getExpirationDateMonth()
+    {
+        return $this->expirationDateMonth;
+    }
+
+    /**
+     * Set expirationDateYear
+     *
+     * @param integer $expirationDateYear
+     *
+     * @return Customer
+     */
+    public function setExpirationDateYear($expirationDateYear)
+    {
+        $this->expirationDateYear = $expirationDateYear;
+
+        return $this;
+    }
+
+    /**
+     * Get expirationDateYear
+     *
+     * @return integer
+     */
+    public function getExpirationDateYear()
+    {
+        return $this->expirationDateYear;
     }
 }

@@ -1,0 +1,27 @@
+{% extends "OCBookingBundle::layout.html.twig" %}
+{% block title %}
+    Confirmation - {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="confirm-container">
+            <h1> Merci</h1>
+            <h1> Votre réservation à bien été prise en compte part nos services. Un email de confirmation vous à été
+                envoyé
+                ainsi qu'une facture de votre achat.</h1>
+
+            <h3> A bientôt au Louvre </h3>
+
+            <?php
+            echo "$email"
+            ?>
+
+
+            <a class="w3-button w3-block" href="{{ path('oc_booking_homepage') }}">
+                Retour à la page d'accueil
+            </a>
+        </div>
+
+    </div>
+{% endblock %}

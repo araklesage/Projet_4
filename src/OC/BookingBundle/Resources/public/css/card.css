@@ -1,0 +1,8 @@
+
+#payment-form{
+    background-color: #C9C9C9;
+    -webkit-box-shadow: 10px 17px 22px -5px rgba(0,0,0,0.77);
+    -moz-box-shadow: 10px 17px 22px -5px rgba(0,0,0,0.77);
+    box-shadow: 10px 17px 22px -5px rgba(0,0,0,0.77);
+    border: 5px solid #bdbbbd;
+}
